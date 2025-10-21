@@ -1,6 +1,6 @@
 ************************************************** ЗАДАЧА 1 ****************************************
 
-1. создаём проект (папка например app_project)
+1. создаём проект (папка homevork)
 
 2. запускаем терминал и подключаем виртуальное окружение
 python -m venv venv
@@ -18,7 +18,7 @@ python -m pip install --upgrade pip
 pip list
 
 7. Создаем проект джанго в конце через пробел ставим точку
-django-admin startproject SecondMain .
+django-admin startproject Main .
 
 8. запускаем джанго 
 python manage.py runserver
@@ -33,17 +33,17 @@ python manage.py
 python manage.py migrate
 
 10. создаём приложение
-python manage.py startapp posts
+python manage.py startapp homework
 
-11. создаём в posts файл urls.py
+11. создаём в homework файл urls.py
 
-12. в файл main/settings.py вносим изменения
+12. в файл Main/settings.py вносим изменения
 *********************
 INSTALLED_APPS = [
     ... ,
     ... ,
 
-    'posts',     
+    'homework',     
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -55,85 +55,38 @@ TIME_ZONE = 'UTC'
 TIME_ZONE = 'Europe/Moscow'
 ******************
 ____________________________________________________
-14. Открываем models.py
-
-from django.db import models
-
-class Post(models.Model):
-    text = models.TextField()
-
-делаем миграции
-
-python manage.py makemigrations posts                                 
-python manage.py migrate
-
-_____________________________
-создаём супер пользователя
-
-python manage.py createsuperuser
-Username: root
-Email address: 
-Password:                               -- пароль не видно когда печатаешь
-Password (again):
-The password is too similar to the username.
-This password is too short. It must contain at least 8 characters.
-This password is too common.
-Bypass password validation and create user anyway? [y/N]: y
-Superuser created successfully.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___________________________________________
-
-
-13. открываем 'posts'/views.py делаем представление модели
+13. открываем homework/views.py делаем представление модели
 ***********
 from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
     return HttpResponse('Index')
-def about(request):
+def aboutas(request):
     return HttpResponse('About')
 
 ***********
 
-14. открываем main/urls.py вносим изменение в URL не забываем импортировать include
+14. открываем Main/urls.py вносим изменение в URL не забываем импортировать include
 ***************
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main_app.urls')),
+    path('', include('homework.urls')),
 ]
 **************
 
-15. открываем main_app/urls.py вносим изменение в URL не забываем импортировать views из main_app
+15. открываем homework/urls.py вносим изменение в URL не забываем импортировать views из main_app
 ***************
 from django.urls import path
-from main_app import views
+from homework import views
 
 
 urlpatterns = [
     path('', views.index), 
-    path('about/', views.about),
+    path('aboutas/', views.aboutas),
 ]
 ***************
 
@@ -143,5 +96,5 @@ python manage.py runserver
 проверяем
 ВСЁ РАБОТАЕТ !!!!!!!!!!!!!!!!!
 
-django-debug-toolbar
+__________________________________________________________
 
