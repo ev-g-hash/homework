@@ -1,0 +1,147 @@
+************************************************** ЗАДАЧА 1 ****************************************
+
+1. создаём проект (папка например app_project)
+
+2. запускаем терминал и подключаем виртуальное окружение
+python -m venv venv
+
+3. активируем виртуальное окружение
+venv\Scripts\activate
+
+4. устанавливаем джанго
+pip install django
+
+5. обновляем pip 
+python -m pip install --upgrade pip
+
+6. проверяем наличие пакетов
+pip list
+
+7. Создаем проект джанго в конце через пробел ставим точку
+django-admin startproject SecondMain .
+
+8. запускаем джанго 
+python manage.py runserver
+
+9. тушим сервер
+ctr + c
+
+8. проверяем наличие команд manage.py
+python manage.py
+
+9. применяем миграцию моделей уже имеющихся по умолчанию в джанго
+python manage.py migrate
+
+10. создаём приложение
+python manage.py startapp posts
+
+11. создаём в posts файл urls.py
+
+12. в файл main/settings.py вносим изменения
+*********************
+INSTALLED_APPS = [
+    ... ,
+    ... ,
+
+    'posts',     
+]
+
+LANGUAGE_CODE = 'en-us'
+на
+LANGUAGE_CODE = 'ru-ru' 
+
+TIME_ZONE = 'UTC'
+на
+TIME_ZONE = 'Europe/Moscow'
+******************
+____________________________________________________
+14. Открываем models.py
+
+from django.db import models
+
+class Post(models.Model):
+    text = models.TextField()
+
+делаем миграции
+
+python manage.py makemigrations posts                                 
+python manage.py migrate
+
+_____________________________
+создаём супер пользователя
+
+python manage.py createsuperuser
+Username: root
+Email address: 
+Password:                               -- пароль не видно когда печатаешь
+Password (again):
+The password is too similar to the username.
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________
+
+
+13. открываем 'posts'/views.py делаем представление модели
+***********
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse('Index')
+def about(request):
+    return HttpResponse('About')
+
+***********
+
+14. открываем main/urls.py вносим изменение в URL не забываем импортировать include
+***************
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main_app.urls')),
+]
+**************
+
+15. открываем main_app/urls.py вносим изменение в URL не забываем импортировать views из main_app
+***************
+from django.urls import path
+from main_app import views
+
+
+urlpatterns = [
+    path('', views.index), 
+    path('about/', views.about),
+]
+***************
+
+16. запускаем сервер 
+python manage.py runserver
+
+проверяем
+ВСЁ РАБОТАЕТ !!!!!!!!!!!!!!!!!
+
+django-debug-toolbar
+
