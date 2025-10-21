@@ -7,14 +7,26 @@
 </head>
 <body bgcolor="7cfcb8">
    
-<h1 style="color:rgba(63, 14, 54, 1)"><strong>Задание 1:</strong></h1>
+<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 1:</strong></h2>
+    <h2 style="color:rgba(173, 21, 64, 1)"> Имя пользователя: {{ user_name }} </h2>
 
-    <h2 style="color:rgba(173, 21, 64, 1)"> Имя пользователя: {{ name }} </h2>
+<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 2:</strong></h2>
+    <h2 style="color:rgba(173, 21, 64, 1)"> Профиль пользователя: </h2>  
+        <ul>
+            <li>Имя: {{ name }}</li>
+            <li>Возраст: {{ age }}</li>
+            <li>Телефон: {{ phone }}</li>
+            <li>Email: {{ email }}</li>
+        </ul>
 
- 
-    
-
-
+<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 3:</strong></h2>
+    <h2 style="color:rgba(173, 21, 64, 1)"> Профиль пользователя по ключам: </h2>  
+        <ul>
+            <li>Имя: {{ profile_data.name }}</li>
+            <li>Возраст: {{ profile_data.age }}</li>
+            <li>Телефон: {{ profile_data.phone }}</li>
+            <li>Email: {{ profile_data.email }}</li>
+        </ul>
 
 
 
