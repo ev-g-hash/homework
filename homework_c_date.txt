@@ -95,4 +95,35 @@ python manage.py runserver
 ВСЁ РАБОТАЕТ !!!!!!!!!!!!!!!!!
 
 __________________________________________________________
+представление
+from django.shortcuts import render
 
+def index(request):
+    user_name = 'Руслан'
+    name = 'Павел'
+    age = 45
+    phone = '+79234567891'
+    email = 'pavel@pavel.com'
+    profile_data={'name':'Павел', 'age':45, 'phone':'+79234567891', 'email':'pavel@pavel.com'}
+    prof_sps=['Павел', 45, '+79234567891', 'pavel@pavel.com'] 
+    context = {'user_name':user_name, 'name':name, 'age':age, 'phone':phone, 'email':email, 'profile_data':profile_data, 'prof_sps':prof_sps}
+
+    return render(request, 'homework/index.html', context)
+
+___________________________________________________________
+
+<p>Год в виде четырех цифр - {% now 'Y' %}</p>
+<p>Год в виде последних двух цифр - {% now 'y' %}</p>
+<p>Полное название месяца - {% now 'F' %}</p>
+<p>Сокращенное название месяца - {% now 'M' %}</p>
+<p>Номер месяца, с ведущим нулём - {% now 'm' %}</p>
+<p>Номер месяца, без ведущего нуля - {% now 'n' %}</p>
+<p>Аббревиатура месяца  - {% now 'N' %}</p>
+<p>День месяца, с ведущим нулём - {% now 'd' %}</p>
+<p>День месяца, без ведущего нуля - {% now 'j' %}</p>
+<p>День недели - текст - {% now 'l' %}</p>
+<p>Часы (0-12) - {% now 'h' %}</p>
+<p>Часы (0-24) - {% now 'H' %}</p>
+<p>Минуты (0-59) - {% now 'i' %}</p>
+<p>Секунды (0-59) - {% now 's' %}</p>
+<p>Дата (день/месяц/год) - {% now 'j/m/Y' %}</p>
