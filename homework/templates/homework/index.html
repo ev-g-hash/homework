@@ -7,11 +7,11 @@
 </head>
 <body bgcolor="7cfcb8">
    
-<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 1:</strong></h2>
-    <h2 style="color:rgba(173, 21, 64, 1)"> Имя пользователя: {{ user_name }} </h2>
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 1:</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)"> Имя пользователя: {{ user_name }} </h2>
 
-<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 2:</strong></h2>
-    <h2 style="color:rgba(173, 21, 64, 1)"> Профиль пользователя: </h2>  
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 2:</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)"> Профиль пользователя: </h2>  
         <ul>
             <li>Имя: {{ name }}</li>
             <li>Возраст: {{ age }}</li>
@@ -19,8 +19,8 @@
             <li>Email: {{ email }}</li>
         </ul>
 
-<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 3:</strong></h2>
-    <h2 style="color:rgba(173, 21, 64, 1)"> Профиль пользователя по ключам: </h2>  
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 3:</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)"> Профиль пользователя по ключам: </h2>  
         <ul>
             <li>Имя: {{ profile_data.name }}</li>
             <li>Возраст: {{ profile_data.age }}</li>
@@ -28,8 +28,8 @@
             <li>Email: {{ profile_data.email }}</li>
         </ul>
 
-<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 4:</strong></h2>
-    <h2 style="color:rgba(173, 21, 64, 1)"> Профиль пользователя по значению элементов: </h2>  
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 4:</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)"> Профиль пользователя по значению элементов: </h2>  
         <ul>
             <li>Имя: {{ prof_sps.0 }}</li>
             <li>Возраст: {{ prof_sps.1 }}</li>
@@ -37,8 +37,34 @@
             <li>Email: {{ prof_sps.3 }}</li>
         </ul>
 
-<h2 style="color:rgba(63, 14, 54, 1)"><strong>Задание 5:</strong></h2>
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 5:</strong></h2>
 <h2 style="color:rgba(63, 14, 54, 1)">Сегодня: {% now 'd' %}.{% now 'm' %}.{% now 'y' %}, время {% now 'H' %}:{% now 'i' %}</h2>
+
+
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 6 (оператор сравнения):</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)">
+        Сотрудник 
+        {{ name_sps.0 }} 
+        {% if experience.0 < 5 %}работает меньше 5ти лет{% endif %}</h2>  
+    <h2 style="color:rgba(63, 14, 54, 1)">
+        Сотрудник 
+        {{ name_sps.1 }} 
+        {% if experience.1 > 5 %}работает больше 5ти лет{% endif %}</h2> 
+
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 7 (цикл):</strong></h2> 
+        <ol>
+            {% for list in user_list %} 
+                <li>{{ list }}</li>
+            {% endfor %} 
+        </ol>
+        
+        
+
+
+
+
+
+
 
 
 
