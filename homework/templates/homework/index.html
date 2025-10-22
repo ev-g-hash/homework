@@ -6,10 +6,10 @@
     <title>Index</title>
 </head>
 <body bgcolor="7cfcb8">
-   
+
 <h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 1:</strong></h2>
     <h2 style="color:rgba(63, 14, 54, 1)"> Имя пользователя: {{ user_name }} </h2>
-
+  
 <h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 2:</strong></h2>
     <h2 style="color:rgba(63, 14, 54, 1)"> Профиль пользователя: </h2>  
         <ul>
@@ -40,8 +40,6 @@
 <h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 5:</strong></h2>
 <h2 style="color:rgba(63, 14, 54, 1)">Сегодня: {% now 'd' %}.{% now 'm' %}.{% now 'y' %}, время {% now 'H' %}:{% now 'i' %}</h2>
 
-
-<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 6 (оператор сравнения):</strong></h2>
     <h2 style="color:rgba(63, 14, 54, 1)">
         Сотрудник 
         {{ name_sps.0 }} 
@@ -57,13 +55,29 @@
                 <li>{{ list }}</li>
             {% endfor %} 
         </ol>
+
+
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 8:</strong></h2> 
+    <h2 style="color:rgba(63, 14, 54, 1)">Новые сотрудники</h2>  
+        <ol>
+        {% for name in user_list2 %}
+            {% if name.experience <= 2 %}
+                <li>{{name.name}}</li>
+            {% endif %}                   
+        {% endfor %}
+        </ol>
+
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 9:</strong></h2>
+    <h2 style="color:rgba(63, 14, 54, 1)">{% include "homework/employees_list.html" %}</h2>   
+        
+<h2 style="color:rgba(173, 21, 64, 1)"><strong>Задание 10:</strong></h2>
+        {% if tmpl_name %}
+            <h2 style="color:rgba(63, 14, 54, 1)">переменная tmpl_name содержит имя - {{ tmpl_name }}</h2>
+        {% else %} 
+        <h2 style="color:rgba(63, 14, 54, 1)">{% include "homework/default_employees.html" %}</h2>
+        {% endif %}
         
         
-
-
-
-
-
 
 
 
@@ -73,3 +87,4 @@
 
 </body>
 </html>
+
