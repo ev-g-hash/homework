@@ -126,7 +126,7 @@ ________________________________
 
 
 
-************************************************** ЗАДАЧА 1 ****************************************
+************************************************** ЗАДАЧА 4 ****************************************
 
 1. создаём проект (папка homework_article)
 
@@ -330,7 +330,52 @@ In [39]: elem = article[0]
 In [40]: print(elem.title)
 Django 5 для начинающих
 
-************************************************** ЗАДАЧА 2 ****************************************
+************************************************** ЗАДАЧА 5 ****************************************
+
+models.py
+
+class Group(models.Model):
+    title = models.CharField(max_length=200, verbose_name='Категория')
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='URL имя')
+    description = models.TextField(verbose_name='Описание')
+
+    class Meta:                
+        verbose_name = 'группы'
+        verbose_name_plural = 'группы' 
+_____________________________
+
+admin.py
+
+from django.contrib import admin
+from .models import Article, Group
+
+admin.site.register(Article) 
+admin.site.register(Group) 
+
+_____________________________
+python manage.py makemigrations article                                 
+python manage.py migrate
+_____________________________
+Используя метод стандартного менеджера модели Group, 
+получите QuerySet содержащий все записи из таблицы 
+данной модели.
+
+python manage.py shell
+
+from article.models import Group
+group = Group.objects.all()
+group
+
+from django.db import connection
+connection.queries
+
+group = Group.objects.values("id", "title", "slug", "description")
+
+group
+Out[7]: <QuerySet [{'id': 1, 'title': 'programmer', 'slug': 'grupp_com', 'description': 'группа программистов'}, 
+{'id': 2, 'title': 'robots', 'slug': 'robot_com', 'description': 'группа роботы'}, 
+{'id': 3, 'title': 'agent', 'slug': 'agent_com', 'description': 'группа агентов'}]>
+
 
 
 
