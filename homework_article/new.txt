@@ -1,0 +1,344 @@
+************************************************** ЗАДАЧА 1 ****************************************
+
+1. создаём проект (папка homework_article)
+
+2. запускаем терминал и подключаем виртуальное окружение
+python -m venv venv
+
+3. активируем виртуальное окружение
+venv_article\Scripts\activate
+
+4. устанавливаем джанго
+pip install django
+
+5. обновляем pip 
+python -m pip install --upgrade pip
+
+6. проверяем наличие пакетов
+pip list
+
+7. Создаем проект джанго в конце через пробел ставим точку
+django-admin startproject main .
+
+8. запускаем джанго 
+python manage.py runserver
+
+9. тушим сервер
+ctr + c
+
+8. проверяем наличие команд manage.py
+python manage.py
+
+9. применяем миграцию моделей уже имеющихся по умолчанию в джанго
+python manage.py migrate
+
+10. создаём приложение
+python manage.py startapp posts
+
+12. в файл SecondMain/settings.py вносим изменения
+*********************
+INSTALLED_APPS = [
+    ... ,
+    ... ,
+
+    'posts',     
+]
+
+LANGUAGE_CODE = 'en-us'
+на
+LANGUAGE_CODE = 'ru-ru' 
+
+TIME_ZONE = 'UTC'
+на
+TIME_ZONE = 'Europe/Moscow'
+******************
+____________________________________________________
+14. Открываем models.py
+
+from django.db import models
+
+class Post(models.Model):
+    text = models.TextField()
+
+делаем миграции
+
+python manage.py makemigrations posts                                 
+python manage.py migrate
+
+_____________________________
+создаём супер пользователя
+
+python manage.py createsuperuser
+Username: root
+Email address: 
+Password:  root                             -- пароль не видно когда печатаешь
+Password (again):  root
+The password is too similar to the username.
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+____________________________________________________
+зарегистрирует модель Post в админке:
+
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)         
+
+___________________________________________
+необходимо добавить метод __str__ в модель Post, 
+отредактировав файл posts/models.py, следующим образом:   
+
+from django.db import models
+class Post(models.Model):
+    text = models.TextField()
+    def __str__(self):  
+        return self.text[:50]        
+________________________________
+
+python manage.py changepassword root - сброс пароля
+
+___________________________________________
+
+# CRUD
+переходим в терминал
+
+python manage.py shell
+
+create() - создание и хранения в БД
+save() - сохранение в БД
+get_or_create() - 
+bulk_create()
+update_or_create()
+
+создание поста из терминала
+
+from posts.models import Post
+second_post=Post.objects.create(text='мой текст из терминала')
+save()
+
+____________________________ещё способ
+
+python manage.py shell
+
+third_post = Post(text='Моя третья запись в БД')
+third_post.save()
+
+_______________________________________________________________
+Этапы работы метода save():
+
+Валидация данных: Перед сохранением, save() запускает валидацию данных модели.
+ Это включает проверку типов данных, наличие обязательных полей, и любые пользовательские 
+ валидаторы, указанные в определениях полей модели или в методе clean(). 
+ Если валидация не проходит, возбуждается исключение ValidationError.
+Вызов clean(): Если валидация прошла успешно, save() вызывает метод clean() 
+модели (если он определен). Метод clean() предоставляет возможность для 
+дополнительной проверки данных, вычисления значений полей, или выполнения 
+другой логики перед сохранением. Если clean() возбуждает ValidationError, сохранение прерывается.
+Обработка сигналов pre_save: Перед сохранением данных в базу данных, Django 
+посылает сигнал pre_save. Подписчики на этот сигнал могут выполнять действия 
+перед сохранением, например, модифицировать данные или выполнять дополнительные проверки.
+Сохранение в базу данных: save() выполняет операцию INSERT (вставка) в базу данных, 
+если объект новый (его id равен None). Если объект уже существует (имеет id), 
+выполняется операция UPDATE (обновление).
+Обработка сигналов post_save: После успешного сохранения данных, Django посылает 
+сигнал post_save. Подписчики на этот сигнал могут выполнять действия после сохранения, 
+например, отправлять уведомления, обновлять связанные объекты или выполнять другие действия.
+______________________________________________________________
+
+from posts.models import Post
+third2_post = Post(text='Моя 4 запись в БД')
+third2_post.pk
+third2_post.text
+
+___________________________________________
+чтение данных из БД
+python manage.py shell
+
+my_post = Post.objects.get(id=1)
+
+my_post
+
+и получаем пост по id
+
+my_post = Post.objects.get(pk=3)
+my_post
+
+try:
+my_post = Post.objects.get(text="какой-то текст")
+
+try:
+    my_post = Post.objects.get(text='какой-то текст')
+except Post.DoesNotExist:
+    print("Post not found")
+except Post.MultipleObjectsReturned:
+    print("Multiple posts found")
+
+________________________________
+
+posts = Post.objects.all()
+posts
+
+for post in posts:
+   ...:     print(post.id, post.text)
+
+1 Привет Django!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2 Ещё один пост он нужен чтобы посмотреть его и прочитать все слова которые здесь написаны!!!
+4 мой текст из терминала
+5 Моя третья запись в БД 
+
+
+________________________________
+Django ORM - технология, которая служит "переводчиком" 
+между объектно-ориентированным 
+языком программирования и реляционной базой данных,
+позволяя разработчикам
+работать с данными, используя привычные 
+объекты вместо написания SQL-запросов.
+
+_________________
+Метод filter()
+
+Метод filter() в Django ORM — это один из наиболее важных методов менеджера моделей. 
+Он используется для получения подмножества объектов модели из базы данных, 
+которые удовлетворяют заданным критериям.
+
+Синтаксис:
+
+MyModel.manager.filter(**kwargs)
+MyModel: Это ваша модель.
+manager: Это менеджер модели (по умолчанию objects).
+**kwargs: Это именованные аргументы, которые определяют критерии фильтрации объектов, 
+которые будут включены в результаты.
+
+Как работает метод filter():
+
+Важно понимать, что filter() сам по себе не выполняет запрос к базе данных. 
+Он только строит запрос. Только при попытке получить данные из QuerySet 
+(например, при итерировании) запрос отправляется в базу данных. 
+Это позволяет цеплять несколько методов фильтрации, сортировки и 
+других операций к одному QuerySet без выполнения множества отдельных 
+запросов к базе данных. Это повышает производительность, особенно при 
+работе с большими наборами данных.
+
+_________________
+
+posts = Post.objects.filter(pk=2)
+posts = Post.objects.filter(id=2)
+posts
+posts = Post.objects.exclude(id=2)
+posts = Post.objects.all()[0]
+posts
+
+posts = Post.objects.all()[:2]
+
+_____________________________
+обновление моделей
+post_1 = Post.objects.get(id=1)
+post_1.text = 'мой первый текст через ОРМ запрос'
+post_1.save(update_fields=['text'])
+post_1.text
+post_1.pk
+
+Post.objects.filter(id=2).update(text='моя вторая изменённая запись')
+post = Post.objects.get(id=2)
+post
+
+Post.objects.update(text='все посты изменены')
+
+post = Post.objects.all()
+post
+________________________________
+удаление записей
+
+post_2 = Post.objects.get(id=2)
+post_2.delete()
+post = Post.objects.all()
+post
+
+my_posts = Post.objects.all()
+print(my_posts.query)
+
+from django.db import connection, reset_queries
+reset_queries()
+my_post=Post.objects.get(id=1)
+print(connection.queries)
+
+________________________________
+models.py
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, verbose_name='наименование')
+
+________________________________
+admin.py
+
+from django.contrib import admin
+from .models import Post, Category
+
+admin.site.register(Post) 
+admin.site.register(Category)        
+_____________________________
+python manage.py makemigrations posts                                 
+python manage.py migrate
+_______________________________
+
+models.py
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, verbose_name='наименование')
+    description = models.TextField(max_length=255, verbose_name='наименование')
+_______________________________
+python manage.py makemigrations posts                                 
+python manage.py migrate
+_______________________________
+
+python manage.py shell
+from posts.models import Category
+
+record= Category(name="Вторая категория", description="Описание второй категории")
+record.save()
+data = Category.objects.all()
+data
+
+_____________________________
+
+models.py
+
+class Article(models.Model):
+    title = models.CharField(max_length=200, verbose_name='заголовок')
+    date = models.DateTimeField(verbose_name='дата')
+    content = models.TextField(verbose_name='содержание')
+    status = models.IntegerField(verbose_name='статус')
+
+_______________________________
+admin.py
+
+from django.contrib import admin
+from .models import Post, Category, Article
+
+admin.site.register(Post) 
+admin.site.register(Category)         
+admin.site.register(Article)  
+
+_______________________________
+python manage.py makemigrations posts                                 
+python manage.py migrate
+_______________________________
+
+python manage.py shell
+from posts.models import Article
+
+article = Article.objects.get(id=1)
+article
+
+data = Article.objects.all()
+x=data[0]
+x.title
+x.date
+x.content
+x.status
+
+
+
