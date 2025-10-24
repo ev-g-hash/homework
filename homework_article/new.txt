@@ -1,3 +1,39 @@
+********************************добавочные коды и другое********************************************
+_______________________________
+добавление метода __str__ в модель Aaaaaa, 
+отредактировав файл posts/models.py, следующим образом:   
+
+from django.db import models
+class Aaaaaa(models.Model):
+    переменная = models.TextField()
+    def __str__(self):  
+        return self.переменная[:50]        
+________________________________
+
+python manage.py changepassword root - сброс пароля
+pip install ipython                  - интерактивный питон
+python manage.py shell               - запуск интерактивного питона
+
+___________________________________________
+
+---------------------------------------создание записи из терминала-------------------------------
+терминал python manage.py shell
+
+from posts.models import Xxxx
+second_post=Xxxx.objects.create(переменная из модели='мой текст из терминала')
+save()
+
+____________________________ещё способ
+
+python manage.py shell
+
+переменная = Xxxx(переменная из модели='Моя третья запись в БД')
+переменная.save()
+
+_______________________________________________________________
+
+
+
 ************************************************** ЗАДАЧА 1 ****************************************
 
 1. создаём проект (папка homework_article)
@@ -33,15 +69,15 @@ python manage.py
 python manage.py migrate
 
 10. создаём приложение
-python manage.py startapp posts
+python manage.py startapp article
 
-12. в файл SecondMain/settings.py вносим изменения
+12. в файл main/settings.py вносим изменения
 *********************
 INSTALLED_APPS = [
     ... ,
     ... ,
 
-    'posts',     
+    'article',     
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -50,19 +86,24 @@ LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 на
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = 'Europe/Samara'
 ******************
 ____________________________________________________
 14. Открываем models.py
 
 from django.db import models
 
-class Post(models.Model):
-    text = models.TextField()
+from django.db import models
+
+class Article(models.Model):
+    title   = models.CharField(max_length=200, verbose_name='заголовок')
+    date    = models.DateTimeField(verbose_name='дата')
+    content = models.TextField(verbose_name='содержание')
+    status  = models.IntegerField(verbose_name='статус')
 
 делаем миграции
 
-python manage.py makemigrations posts                                 
+python manage.py makemigrations article                                 
 python manage.py migrate
 
 _____________________________
@@ -79,53 +120,22 @@ This password is too common.
 Bypass password validation and create user anyway? [y/N]: y
 Superuser created successfully.
 ____________________________________________________
-зарегистрирует модель Post в админке:
+зарегистрирует модель Article в admin.py:
 
 from django.contrib import admin
-from .models import Post
+from .models import Article
 
-admin.site.register(Post)         
+admin.site.register(Article)         
 
-___________________________________________
-необходимо добавить метод __str__ в модель Post, 
-отредактировав файл posts/models.py, следующим образом:   
+_________________________________________
 
-from django.db import models
-class Post(models.Model):
-    text = models.TextField()
-    def __str__(self):  
-        return self.text[:50]        
-________________________________
 
-python manage.py changepassword root - сброс пароля
 
-___________________________________________
 
-# CRUD
-переходим в терминал
 
-python manage.py shell
 
-create() - создание и хранения в БД
-save() - сохранение в БД
-get_or_create() - 
-bulk_create()
-update_or_create()
 
-создание поста из терминала
 
-from posts.models import Post
-second_post=Post.objects.create(text='мой текст из терминала')
-save()
-
-____________________________ещё способ
-
-python manage.py shell
-
-third_post = Post(text='Моя третья запись в БД')
-third_post.save()
-
-_______________________________________________________________
 Этапы работы метода save():
 
 Валидация данных: Перед сохранением, save() запускает валидацию данных модели.
