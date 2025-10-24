@@ -18,3 +18,11 @@ class Group(models.Model):
     class Meta:                
         verbose_name = 'группы'
         verbose_name_plural = 'группы' 
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, verbose_name='имя')
+    description = models.TextField(max_length=255, blank=True, default='', verbose_name='описание')
+
+    class Meta:                
+        verbose_name = 'категорию'
+        verbose_name_plural = 'категории' 

@@ -377,95 +377,64 @@ Out[7]: <QuerySet [{'id': 1, 'title': 'programmer', 'slug': 'grupp_com', 'descri
 {'id': 3, 'title': 'agent', 'slug': 'agent_com', 'description': 'группа агентов'}]>
 
 
+************************************************** ЗАДАЧА 6 ****************************************
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-models.py
-
-class Category(models.Model):
-    name = models.CharField(max_length=50, verbose_name='наименование')
-
-________________________________
-admin.py
+админка
 
 from django.contrib import admin
-from .models import Post, Category
+from .models import Article, Group, Category
 
-admin.site.register(Post) 
-admin.site.register(Category)        
-_____________________________
-python manage.py makemigrations posts                                 
-python manage.py migrate
-_______________________________
+admin.site.register(Article) 
+admin.site.register(Group) 
+admin.site.register(Category) 
 
-models.py
+модель
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, verbose_name='наименование')
-    description = models.TextField(max_length=255, verbose_name='наименование')
-_______________________________
-python manage.py makemigrations posts                                 
-python manage.py migrate
-_______________________________
+    name = models.CharField(max_length=50, verbose_name='имя')
+    description = models.TextField(max_length=255, blank=True, default='', verbose_name='описание')
 
-python manage.py shell
-from posts.models import Category
-
-record= Category(name="Вторая категория", description="Описание второй категории")
-record.save()
-data = Category.objects.all()
-data
+    class Meta:                
+        verbose_name = 'категории'
+        verbose_name_plural = 'категорию' 
 
 _____________________________
-
-models.py
-
-class Article(models.Model):
-    title = models.CharField(max_length=200, verbose_name='заголовок')
-    date = models.DateTimeField(verbose_name='дата')
-    content = models.TextField(verbose_name='содержание')
-    status = models.IntegerField(verbose_name='статус')
-
-_______________________________
-admin.py
-
-from django.contrib import admin
-from .models import Post, Category, Article
-
-admin.site.register(Post) 
-admin.site.register(Category)         
-admin.site.register(Article)  
-
-_______________________________
-python manage.py makemigrations posts                                 
+python manage.py makemigrations article                                 
 python manage.py migrate
-_______________________________
+_____________________________
+
+
+Используя метод filter() стандартного менеджера модели Category, получите QuerySet 
+содержащий все записи из таблицы данной модели, у которых значение поля name равно строке Django 4
 
 python manage.py shell
-from posts.models import Article
+from article.models import Category
+Category.objects.all()
 
-article = Article.objects.get(id=1)
-article
+from django.db import connection
+connection.queries
 
-data = Article.objects.all()
-x=data[0]
-x.title
-x.date
-x.content
-x.status
+category = Category.objects.filter(name="Django 4")
+category
+
+for elem in category:
+    print(f"name - {elem.name}, description - {elem.description}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
