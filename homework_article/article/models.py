@@ -6,3 +6,7 @@ class Article(models.Model):
     content = models.TextField(verbose_name='содержание')
     status  = models.IntegerField(verbose_name='статус')
 
+    class Meta:                
+        verbose_name = 'статьи'
+        verbose_name_plural = 'статьи' 
+    

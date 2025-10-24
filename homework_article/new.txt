@@ -30,7 +30,99 @@ python manage.py shell
 переменная = Xxxx(переменная из модели='Моя третья запись в БД')
 переменная.save()
 
-_______________________________________________________________
+____________________________ещё способ
+
+from posts.models import Post
+third2_post = Post(text='Моя 4 запись в БД')
+third2_post.pk
+third2_post.text
+
+---------------------------------------чтение записи из терминала-------------------------------
+___________________________________________
+чтение данных из БД
+python manage.py shell
+
+my_post = Article.objects.get(id=1)
+
+my_post
+
+и получаем пост по id
+
+my_post = Post.objects.get(pk=3)
+my_post
+
+-------------------исключение
+try:
+my_post = Post.objects.get(text="какой-то текст")
+
+try:
+    my_post = Post.objects.get(text='какой-то текст')
+except Post.DoesNotExist:
+    print("Post not found")
+except Post.MultipleObjectsReturned:
+    print("Multiple posts found")
+
+________________________________ получение данных (собственно тоже чтение)
+
+posts = Post.objects.all()
+posts
+
+for post in posts:
+   ...:     print(post.id, post.text)
+
+1 Привет Django!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2 Ещё один пост он нужен чтобы посмотреть его и прочитать все слова которые здесь написаны!!!
+4 мой текст из терминала
+5 Моя третья запись в БД 
+
+
+________________________________ filter
+
+
+posts = Post.objects.filter(pk=2)
+posts = Post.objects.filter(id=2)
+posts
+posts = Post.objects.exclude(id=2)
+posts = Post.objects.all()[0]
+posts
+
+posts = Post.objects.all()[:2]
+
+_____________________________обновление моделей
+
+post_1 = Post.objects.get(id=1)
+post_1.text = 'мой первый текст через ОРМ запрос'
+post_1.save(update_fields=['text'])
+post_1.text
+post_1.pk
+
+Post.objects.filter(id=2).update(text='моя вторая изменённая запись')
+post = Post.objects.get(id=2)
+post
+
+Post.objects.update(text='все посты изменены')
+
+post = Post.objects.all()
+post
+________________________________
+удаление записей
+
+post_2 = Post.objects.get(id=2)
+post_2.delete()
+post = Post.objects.all()
+post
+
+my_posts = Post.objects.all()
+print(my_posts.query)
+
+from django.db import connection, reset_queries
+reset_queries()
+my_post=Post.objects.get(id=1)
+print(connection.queries)
+
+________________________________
+
+
 
 
 
@@ -128,154 +220,134 @@ from .models import Article
 admin.site.register(Article)         
 
 _________________________________________
-
-
-
-
-
-
-
-
-Этапы работы метода save():
-
-Валидация данных: Перед сохранением, save() запускает валидацию данных модели.
- Это включает проверку типов данных, наличие обязательных полей, и любые пользовательские 
- валидаторы, указанные в определениях полей модели или в методе clean(). 
- Если валидация не проходит, возбуждается исключение ValidationError.
-Вызов clean(): Если валидация прошла успешно, save() вызывает метод clean() 
-модели (если он определен). Метод clean() предоставляет возможность для 
-дополнительной проверки данных, вычисления значений полей, или выполнения 
-другой логики перед сохранением. Если clean() возбуждает ValidationError, сохранение прерывается.
-Обработка сигналов pre_save: Перед сохранением данных в базу данных, Django 
-посылает сигнал pre_save. Подписчики на этот сигнал могут выполнять действия 
-перед сохранением, например, модифицировать данные или выполнять дополнительные проверки.
-Сохранение в базу данных: save() выполняет операцию INSERT (вставка) в базу данных, 
-если объект новый (его id равен None). Если объект уже существует (имеет id), 
-выполняется операция UPDATE (обновление).
-Обработка сигналов post_save: После успешного сохранения данных, Django посылает 
-сигнал post_save. Подписчики на этот сигнал могут выполнять действия после сохранения, 
-например, отправлять уведомления, обновлять связанные объекты или выполнять другие действия.
-______________________________________________________________
-
-from posts.models import Post
-third2_post = Post(text='Моя 4 запись в БД')
-third2_post.pk
-third2_post.text
-
-___________________________________________
-чтение данных из БД
 python manage.py shell
 
-my_post = Post.objects.get(id=1)
+запрос по заданию
+Используя метод get() стандартного менеджера модели Article, 
+получите запись со значением поля title равным Django 5 для начинающих.
 
-my_post
+Внёс дополнения а то было Django 5 стало Django 5 для начинающих
+Article.objects.filter(id=1).update(title='Django 5 для начинающих')
+article = Article.objects.get(id=1)
+article
 
-и получаем пост по id
+смотри ниже по запросам если есть строковое или нет, там разные варианты
+то есть если нет строкового представления в модели то поиск по названию возвращает объект
+в определённых случаях
 
-my_post = Post.objects.get(pk=3)
-my_post
+_________________________________________________
+делаю запрос по заданию для строкового представления в модели
+from article.models import Article
 
-try:
-my_post = Post.objects.get(text="какой-то текст")
+article = Article.objects.get(id=1)
+article
 
-try:
-    my_post = Post.objects.get(text='какой-то текст')
-except Post.DoesNotExist:
-    print("Post not found")
-except Post.MultipleObjectsReturned:
-    print("Multiple posts found")
+___________________________________________________
+получения данных если нет строкового представления в модели
+article = Article.objects.get(id=1)
+article
+Out[9]: <Article: Article object (1)>
 
-________________________________
+x = article
+x.title
+Out[11]: 'Django 5 для начинающих'
+___________________________________________________
+делаю запрос по заданию для строкового представления в модели
 
-posts = Post.objects.all()
-posts
+In [9]: article = Article.objects.get(title="Django 5 для начинающих")
 
-for post in posts:
-   ...:     print(post.id, post.text)
+In [10]: article
+Out[10]: <Article: Django 5 для начинаю>
+___________________________________________________
+получения данных если нет строкового представления в модели
+In [1]: from article.models import Article
 
-1 Привет Django!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-2 Ещё один пост он нужен чтобы посмотреть его и прочитать все слова которые здесь написаны!!!
-4 мой текст из терминала
-5 Моя третья запись в БД 
+In [2]: article = Article.objects.get(title="Django 5 для начинающих")
+
+In [3]: article
+Out[3]: <Article: Article object (1)>
+
+********************************************************************************************
+вот ещё интерсный код даёт возможность получения всех столбцов из таблицы Article
+In [6]: from article.models import Article
+
+In [7]: Article.objects.all()
+Out[7]: <QuerySet [<Article: Article object (1)>]>
+
+In [8]: from django.db import connection
+
+In [9]: connection.queries
+Out[9]: 
+[{'sql': 'SELECT "article_article"."id", "article_article"."title", 
+"article_article"."date", "article_article"."content", "article_article"."status" 
+FROM "article_article" LIMIT 21',
+  'time': '0.001'}]
+
+теперь можно сделать выборку по полям
+In [10]: article = Article.objects.values("id", "title", "date", "content", "status")
+
+In [11]: article
+Out[11]: <QuerySet [{'id': 1, 'title': 'Django 5 для начинающих', 'date': datetime.datetime(2025, 10, 24, 15, 42, 59, tzinfo=datetime.timezone.utc), 'content': 'Django 5 - очень классно, всем рекомендую, ну и не только 5 а именно Django', 'status': 1}]>
+
+In [12]: x = article
+In [15]: x[0]
+-----------------------------------здесь уже на выходе получаем словарь
+Out[15]: 
+{'id': 1,
+ 'title': 'Django 5 для начинающих',
+ 'date': datetime.datetime(2025, 10, 24, 15, 42, 59, tzinfo=datetime.timezone.utc),
+ 'content': 'Django 5 - очень классно, всем рекомендую, ну и не только 5 а именно Django',
+ 'status': 1}
+
+-----------------------------------можно пройтись циклом по классу
+In [23]: for i in x:
+    ...:     print(i)
+    ...: 
+{'id': 1, 'title': 'Django 5 для начинающих', 'date': 
+datetime.datetime(2025, 10, 24, 15, 42, 59, tzinfo=datetime.timezone.utc), 
+'content': 'Django 5 - очень классно, всем рекомендую, ну и не только 5 а именно Django', 'status': 1}
+
+___________________________________________
+
+ещё раз поехали
+
+article = Article.objects.all()
+article
+elem = article[0]
+print(elem.title)
+
+******************************************гениально***************************
+In [36]: article = Article.objects.all()
+
+In [37]: article
+Out[37]: <QuerySet [<Article: Article object (1)>]>
+
+In [38]: print(article[0])
+Article object (1)
+
+In [39]: elem = article[0]
+
+In [40]: print(elem.title)
+Django 5 для начинающих
+
+************************************************** ЗАДАЧА 2 ****************************************
 
 
-________________________________
-Django ORM - технология, которая служит "переводчиком" 
-между объектно-ориентированным 
-языком программирования и реляционной базой данных,
-позволяя разработчикам
-работать с данными, используя привычные 
-объекты вместо написания SQL-запросов.
 
-_________________
-Метод filter()
 
-Метод filter() в Django ORM — это один из наиболее важных методов менеджера моделей. 
-Он используется для получения подмножества объектов модели из базы данных, 
-которые удовлетворяют заданным критериям.
 
-Синтаксис:
 
-MyModel.manager.filter(**kwargs)
-MyModel: Это ваша модель.
-manager: Это менеджер модели (по умолчанию objects).
-**kwargs: Это именованные аргументы, которые определяют критерии фильтрации объектов, 
-которые будут включены в результаты.
 
-Как работает метод filter():
 
-Важно понимать, что filter() сам по себе не выполняет запрос к базе данных. 
-Он только строит запрос. Только при попытке получить данные из QuerySet 
-(например, при итерировании) запрос отправляется в базу данных. 
-Это позволяет цеплять несколько методов фильтрации, сортировки и 
-других операций к одному QuerySet без выполнения множества отдельных 
-запросов к базе данных. Это повышает производительность, особенно при 
-работе с большими наборами данных.
 
-_________________
 
-posts = Post.objects.filter(pk=2)
-posts = Post.objects.filter(id=2)
-posts
-posts = Post.objects.exclude(id=2)
-posts = Post.objects.all()[0]
-posts
 
-posts = Post.objects.all()[:2]
 
-_____________________________
-обновление моделей
-post_1 = Post.objects.get(id=1)
-post_1.text = 'мой первый текст через ОРМ запрос'
-post_1.save(update_fields=['text'])
-post_1.text
-post_1.pk
 
-Post.objects.filter(id=2).update(text='моя вторая изменённая запись')
-post = Post.objects.get(id=2)
-post
 
-Post.objects.update(text='все посты изменены')
 
-post = Post.objects.all()
-post
-________________________________
-удаление записей
 
-post_2 = Post.objects.get(id=2)
-post_2.delete()
-post = Post.objects.all()
-post
 
-my_posts = Post.objects.all()
-print(my_posts.query)
-
-from django.db import connection, reset_queries
-reset_queries()
-my_post=Post.objects.get(id=1)
-print(connection.queries)
-
-________________________________
 models.py
 
 class Category(models.Model):
