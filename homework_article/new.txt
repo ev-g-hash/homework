@@ -15,31 +15,43 @@ pip install ipython                  - интерактивный питон
 python manage.py shell               - запуск интерактивного питона
 
 ___________________________________________
-
----------------------------------------создание записи из терминала-------------------------------
+создание записи из терминала
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
 терминал python manage.py shell
 
 from posts.models import Xxxx
 second_post=Xxxx.objects.create(переменная из модели='мой текст из терминала')
 save()
 
-____________________________ещё способ
+____________________________
+ещё способ
 
 python manage.py shell
 
 переменная = Xxxx(переменная из модели='Моя третья запись в БД')
 переменная.save()
 
-____________________________ещё способ
+____________________________
+ещё способ
 
 from posts.models import Post
 third2_post = Post(text='Моя 4 запись в БД')
 third2_post.pk
 third2_post.text
 
----------------------------------------чтение записи из терминала-------------------------------
+
 ___________________________________________
 чтение данных из БД
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
+
 python manage.py shell
 
 my_post = Article.objects.get(id=1)
@@ -51,7 +63,9 @@ my_post
 my_post = Post.objects.get(pk=3)
 my_post
 
--------------------исключение
+____________________
+исключение
+
 try:
 my_post = Post.objects.get(text="какой-то текст")
 
@@ -62,7 +76,13 @@ except Post.DoesNotExist:
 except Post.MultipleObjectsReturned:
     print("Multiple posts found")
 
-________________________________ получение данных (собственно тоже чтение)
+________________________________ 
+получение данных (собственно тоже чтение)
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
 
 posts = Post.objects.all()
 posts
@@ -76,7 +96,13 @@ for post in posts:
 5 Моя третья запись в БД 
 
 
-________________________________ filter
+________________________________ 
+filter
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
 
 
 posts = Post.objects.filter(pk=2)
@@ -88,7 +114,13 @@ posts
 
 posts = Post.objects.all()[:2]
 
-_____________________________обновление моделей
+_____________________________
+обновление моделей
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
 
 post_1 = Post.objects.get(id=1)
 post_1.text = 'мой первый текст через ОРМ запрос'
@@ -106,6 +138,11 @@ post = Post.objects.all()
 post
 ________________________________
 удаление записей
+*--------
+from article.models import Xxxx - подключить класс
+(from django.db import connection
+connection.queries) - из бд считать 
+*----
 
 post_2 = Post.objects.get(id=2)
 post_2.delete()
@@ -421,18 +458,93 @@ for elem in category:
     print(f"name - {elem.name}, description - {elem.description}")
 
 
+************************************************** ЗАДАЧА 7 ****************************************
 
+models.py
 
+class Person(models.Model):
+    first_name = models.CharField(max_length=30, verbose_name='клиенты')
+    last_name  = models.CharField(max_length=30, verbose_name='клиенты')
 
+    class Meta:                
+            verbose_name = 'клиенты'
+            verbose_name_plural = 'клиенты' 
 
+admin.py
 
+from django.contrib import admin
+from .models import Article, Group, Category, Person
 
+admin.site.register(Article) 
+admin.site.register(Group) 
+admin.site.register(Category) 
+admin.site.register(Person) 
 
+_____________________________
+python manage.py makemigrations article                                 
+python manage.py migrate
+_____________________________
 
+Используя метод стандартного менеджера модели Person, 
+удалите запись из таблицы данной модели, у которой значение поля id равно 7
 
+_________________________________________
 
+python manage.py shell 
 
+from article.models import Person
+Person.objects.all() 
 
+from django.db import connection
+connection.queries
+
+person = Person.objects.all() 
+
+person = Person.objects.get(id=7)
+person.delete()
+person = Person.objects.all()
+person
+
+------------
+супер порядок действий
+*-
+from article.models import Person
+Person.objects.all()
+
+from django.db import connection
+connection.queries
+
+person = Person.objects.get(id=7)
+person.delete()
+person = Person.objects.all()
+person
+for elem in person:
+   print(f"id={elem.id}, имя={elem.first_name}, фамилия={elem.last_name}")
+
+************************************************** ЗАДАЧА 7 ****************************************
+
+Используя метод update() стандартного менеджера модели Article, 
+измените значение поля status на равное 1 для записи, в таблице данной модели, 
+у которой значение поля id равно 21.
+
+python manage.py shell 
+
+from article.models import Article
+Article.objects.all() 
+
+from django.db import connection
+connection.queries
+
+article = Article.objects.all()
+for elem in article:
+    print(f"id = {elem.id}, title = {elem.title}, status = {elem.status}")
+
+   
+Article.objects.filter(id=21).update(status='1')
+
+article = Article.objects.all() 
+for elem in article:
+    print(f"id = {elem.id}, title = {elem.title}, status = {elem.status}")
 
 
 

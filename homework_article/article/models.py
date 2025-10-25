@@ -26,3 +26,11 @@ class Category(models.Model):
     class Meta:                
         verbose_name = 'категорию'
         verbose_name_plural = 'категории' 
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=30, verbose_name='клиенты')
+    last_name  = models.CharField(max_length=30, verbose_name='клиенты')
+
+    class Meta:                
+            verbose_name = 'клиентов'
+            verbose_name_plural = 'клиенты' 
