@@ -38,8 +38,10 @@ INSTALLED_APPS = [
 models.py - создаём модель для представления БД
 
 ---------------------------------------------
+миграции
 
-
+python manage.py makemigrations blog
+python manage.py migrate blog
 
 
 
