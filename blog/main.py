@@ -53,6 +53,18 @@ python manage.py createsuperuser
 admin
 admin
 
+---------------------------------------------
+заполнить view, шаблоны, urls
+
+потом в settings.py
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / "templates/",
+        ],
+        ...
 
 
 
