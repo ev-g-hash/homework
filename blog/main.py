@@ -23,6 +23,11 @@ django-admin startproject personal_blog .
 
 python manage.py runserver
 
+-------------------------------------------
+применение основной миграции для проекта
+
+python manage.py migrate
+
 --------------------------------------------
 создание приложения блог
 
@@ -42,6 +47,28 @@ models.py - создаём модель для представления БД
 
 python manage.py makemigrations blog
 python manage.py migrate blog
+
+---------------------------------------------
+создание админки
+
+python manage.py createsuperuser
+admin
+admin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
