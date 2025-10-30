@@ -66,10 +66,10 @@ urlpatterns = [
 ]
 **************
 
-15. открываем homework/urls.py вносим изменение в URL не забываем импортировать views из main_app
+15. открываем forms/urls.py вносим изменение в URL не забываем импортировать views из main_app
 ***************
 from django.urls import path
-from homework import views
+from forms import views
 
 
 urlpatterns = [
