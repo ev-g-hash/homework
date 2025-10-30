@@ -1,0 +1,14 @@
+    <h2 style="color:rgb(128, 5, 3)">Задание 3</h2>
+
+    <form method="POST" style="color:rgba(13, 128, 3, 1)">
+            {% csrf_token %} 
+                {{ form3.as_p }}
+            <input type="submit" value="Send">
+    </form> 
+    <hr>
+
+<div>
+    <h3>
+        <a href="{% url "work" %}">Вернуться на главную</a>        
+    </h3>
+</div>
