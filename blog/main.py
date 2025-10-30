@@ -70,24 +70,13 @@ __________________________________
 
 __________________________________
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
+
+# импортируем модуль
+import requests
+
+# отправляем запрос с заголовками по нужному адресу
+req = requests.get("https://rf-klondayk.firebaseapp.com/pages/blog/articles/assets/creating-blog-site-tutorial-site/index.html#")
+# считываем текст HTML-документа
+src = req.text
+print(src)

@@ -1,36 +1,19 @@
- {% load static %}
-
- <html lang="en">
- {% comment %} <head>
-     <meta charset="utf-8">     
-     <title>My Personal Blog</title>
-     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-
-     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
-
- </head> {% endcomment %}
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>Metamorphosis Design Free Css Templates</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<link href="{% static "styles.css" %}" rel="stylesheet" type="text/css" />
+<link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
-
-
-
- <body>
-    {% comment %} <h4>My Personal Blog</h4>
-        <a href="{% url "blog_index" %}">Home</a>
-    <hr> {% endcomment %}
-
-    {% comment %} {% block page_title %}{% endblock page_title %} {% endcomment %}
-    
-    {% comment %} {% block page_content %}{% endblock page_content %} {% endcomment %}
+<body>
 
 
 <div id="bg2">
+
+
+
 
 <div id="bg3">
 <!-- header begins -->
@@ -108,24 +91,15 @@
                        </div>
                       </div>
                     <div id="center">
-                        {% comment %} -------------------------------------------------------вставка заголовок {% endcomment %}
-                       <h1 >
-                            {% block page_title %}                            
-                            {% endblock page_title %}
-                        </h1>
-                        {% comment %} -------------------------------------------------------конец вставка заголовок {% endcomment %}
+                      <h1>Metamorphosis Design</h1>
                         <div class="text">
-
-                        	<span>
-                                    <a href="{% url "blog_index" %}">вернуться на заголовок ко всем постам</a>
-                                <hr> 
-
-                                 {% block page_content %}
-                                 {% endblock page_content %}
-                            </span>
-                      	
-                        </div>
-                         
+                        	<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sollicitudin facilisis quam, eget mattis nulla adipiscing vel. </span>
+                      	</div>
+                         <div class="text">
+                          <img src="images/img1.jpg" class="img" width="120" height="90" alt="" />
+                          Nullam magna purus, pharetra at tempor in, tristique at neque. Aenean pretium arcu sit amet nulla ultricies convallis consequat lectus tincidunt. Maecenas nibh risus, placerat eu luctus ac, bibendum id lacus. In posuere, urna at interdum varius, tortor dui interdum arcu, in ullamcorper mi felis sit... <br />
+                          <div class="read"><a href="#"> read more</a></div><br />
+                   	  	</div>
                         <h1>Metamorphosis Design</h1>
                         <div class="text">
                           <ol>
@@ -148,7 +122,7 @@
                 
                     </div>
                     
-                      <div style="clear: both"><img src="{% static "images/spaser.gif" %}" alt="" width="1" height="1" /></div>
+                      <div style="clear: both"><img src="images/spaser.gif" alt="" width="1" height="1" /></div>
                     </div>
                 </div>
             </div>
@@ -172,5 +146,4 @@
 
 
 <div style="text-align: center; font-size: 0.75em;">Design downloaded from <a href="http://www.freewebtemplates.com/">free website templates</a>.</div></body>
-</body>
 </html>

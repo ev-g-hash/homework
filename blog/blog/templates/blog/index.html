@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
+{% comment %} -------------------------------------вставка title {% endcomment %}
 {% block page_title %}
-     <h2>Blog Posts</h2>
+     <h2>Здесь размещены мои посты</h2>
  {% endblock page_title %}
- 
- {% block page_content %}
+{% comment %} -------------------------------------конец вставка title {% endcomment %}
+
+{% comment %} -------------------------------------вставка контента с постами {% endcomment %}
+ {% block page_content %} 
      {% block posts %}
 
          {% for post in posts %}
@@ -20,5 +23,6 @@
             <p>{{ post.body | slice:":400" }}...</p>
         {% endfor %}
         
-    {% endblock posts %}
+    {% endblock posts %} 
 {% endblock page_content %}
+{% comment %} -------------------------------------конец вставка контента с постами {% endcomment %}
