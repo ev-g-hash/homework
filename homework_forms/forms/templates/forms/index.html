@@ -1,28 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+    
+     
+{% block index %}
 
-    <h2 style="color:rgb(128, 5, 3)">Задание 1</h2>
-
+  <h2 style="color:rgb(128, 5, 3)">Задание 1</h2>
     <form method="POST" style="color:rgba(13, 128, 3, 1)">
-            {% csrf_token %} 
-                {{ form.as_p }}
-            <input type="submit" value="Send">
+              {% csrf_token %} 
+                    {{ form.as_p }}
+              <input type="submit" value="отправить">
     </form> 
-    <hr>
+<hr>
 
 <div>
-    <h3>
-        <a href="{% url "work2" %}">посмотреть задание 2</a>
-    </h3>
+  <h3>
+		<button>
+			<a href="{% url "work2" %}", style="color:rgba(248, 243, 243, 1)">заполнить форму 2</a>
+		</button>
+  </h3>
 </div>
 <div>
-    <h3>
-        <a href="{% url "work3" %}">посмотреть задание 3</a>
-    </h3>
+  <h3>
+		<button>
+    	<a href="{% url "work3" %}", style="color:rgba(248, 243, 243, 1)">заполнить форму 3</a>
+		</button>
+  </h3>
 </div>
 <div>
-    <h3>
-        <a href="{% url "work4" %}">посмотреть задание 4</a>
-    </h3>
+  <h3>
+		<button>
+    	<a href="{% url "work4" %}", style="color:rgba(248, 243, 243, 1)">заполнить форму 4</a>
+		</button>
+  </h3>
 </div>
+     
+{% endblock index %}
+    
+
 
 
 
