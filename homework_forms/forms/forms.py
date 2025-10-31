@@ -26,8 +26,27 @@ class PublisherForm(forms.Form):
     address = forms.CharField(label='Адрес', max_length=200, help_text="Введите свой адрес")
     city = forms.CharField(label='Город', max_length=20, help_text="Введите свой город")
     post_index = forms.CharField(label='Почтовый индекс', max_length=20, help_text="Введите свой почтовый индекс")
-    # website = forms.CharField(label='Сайт', max_length=20, help_text="Введите адрес своего сайта", required=False)
     website = forms.URLField(label='Сайт', help_text="Введите адрес своего сайта", required=False)
+
+class CarForm(forms.Form):
+    model = forms.CharField(label='Модель', initial='undefined')
+    brand = forms.CharField(label='Марка', initial='undefined')
+    factory_year = forms.IntegerField(label='Год выпуска', initial=2023)
+    model_year = forms.IntegerField(label='Модельный год', initial=2022)
+    price = forms.IntegerField(label='Цена', initial=0)
+
+# class ContactForm3(forms.Form):
+#     name = forms.CharField(label='Имя', help_text="Введите своё имя", error_messages='Ошибка, не введено имя')
+#     email = forms.CharField(label='E-Mail', help_text="Введите ваш E-Mail", error_messages='Ошибка, не введён E-Mail')
+#     message = forms.CharField(label='Сообщение', widget=forms.Textarea, help_text="Введите сообщение", error_messages='Ошибка, не введено сообщение')
+#     promo = forms.BooleanField(label='Подписаться на получение новостных и рекламных рассылок?', required=False)
+
+class ContactForm3(forms.Form):
+    name = forms.CharField(label='Имя', help_text="Введите своё имя")
+    email = forms.CharField(label='E-Mail', help_text="Введите ваш E-Mail")
+    message = forms.CharField(label='Сообщение', widget=forms.Textarea, help_text="Введите сообщение", error_messages={'требуется': 'сообщение'}, attrs={'заполнитель': 'Имя'})
+    promo = forms.BooleanField(label='Подписаться на получение новостных и рекламных рассылок?', required=False)
+
 
 
 

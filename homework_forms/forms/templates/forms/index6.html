@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}  
+
+{% block index %} 
+<h2 style="color:rgb(128, 5, 3)">Задание 6</h2>
+  <form method="POST" style="color:rgba(13, 128, 3, 1)">
+          {% csrf_token %} 
+              {{ form6.as_p }}
+          <input type="submit" value="Отправить">
+  </form> 
+<hr>
+
+<div>
+  <h3>
+    <button>
+      <a href="{% url "work" %}", style="color:rgba(248, 243, 243, 1)">Вернуться на главную</a> 
+    </button>       
+  </h3>
+</div>
+
+{% endblock index %} 

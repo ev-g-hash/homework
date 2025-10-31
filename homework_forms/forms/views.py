@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import ContactForm, SubscribeForm, PublisherForm, ContactForm2
+from .forms import ContactForm, SubscribeForm, PublisherForm, ContactForm2, CarForm, ContactForm3
 
 def work1(request):
     if request.method == 'POST':
@@ -78,12 +78,54 @@ def work4(request):
                 Вы ввели имя: {name}
                 Вы ввели адрес: {address}
                 Вы ввели город: {city} 
-                Вы ввели индекс {post_index}
-                Вы ввели веб-сайт {website}
+                Вы ввели индекс: {post_index}
+                Вы ввели веб-сайт: {website}
             </pre>           
             ''')
     else:
         userform = PublisherForm()
         return render(request, 'forms/index4.html', {'form4':userform})
+    
+def work5(request):
+    if request.method == 'POST':
+        
+        model = request.POST.get('model')
+        brand = request.POST.get('brand')
+        factory_year = request.POST.get('factory_year')
+        model_year = request.POST.get('model_year')
+        price = request.POST.get('price')
+
+        return HttpResponse(f'''
+            <pre>
+                Модель автомобиля: {model}
+                Марка автомобиля: {brand}
+                Год выпуска автомобиля: {factory_year} 
+                Год выпуска модели: {model_year}
+                Цена: {price}
+            </pre>           
+            ''')
+    else:
+        userform = CarForm()
+        return render(request, 'forms/index5.html', {'form5':userform})
+    
+def work6(request):
+    if request.method == 'POST':
+        
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        promo = request.POST.get('promo')
+
+        return HttpResponse(f'''
+            <pre>
+                Вы ввели имя: {name}
+                Вы ввели Е-майл: {email}
+                Вы ввели сообщение: {message} 
+                Подписка на рекламу: {promo}                
+            </pre>           
+            ''')
+    else:
+        userform = ContactForm3()
+        return render(request, 'forms/index6.html', {'form6':userform})
     
    
