@@ -4,14 +4,15 @@
 {% block content %}
 
 <div id="bottom_bar_black"> <div id="main_container">
-	<div id="header_lower">  <div id="header_content_lowerline">Contact
-	    <div id="header_content_lowerboxcontent">148 Blackways Street<br />
-	      Hargary<br />
-	      Lingvillage<br />
-        HG43 9HA <BR />
-        info@domainhappy.com<br />
-        www.domainhappy.com<br />
-        01982 698 621<BR /> 
+	<div id="header_lower">  <div id="header_content_lowerline">Обратная связь
+	    <div id="header_content_lowerboxcontent">
+    
+            <form method="POST" style="color:rgba(241, 247, 240, 1)">
+              {% csrf_token %} 
+                    {{ form.as_p }}
+              <input type="submit" value="отправить">
+            </form> 
+
         </div>
 	</div>
 
