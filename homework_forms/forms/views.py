@@ -10,8 +10,12 @@ def work1(request):
         message = request.POST.get('message')
 
         return HttpResponse(f'''
-            <h2>Вы ввели имя: {name}, вы ввели емайл: {email}, вы ввели сообщение {message}</h2>            
-            ''')
+            <pre>
+                Вы ввели имя: {name} 
+                Вы ввели емайл: {email} 
+                Вы ввели сообщение: {message}
+            </pre>            
+        ''')
     else:
         userform = ContactForm()
         return render(request, 'forms/index.html', {'form':userform})
@@ -26,7 +30,13 @@ def work2(request):
         promo = request.POST.get('promo')
 
         return HttpResponse(f'''
-            <h2>Вы ввели имя: {first_name},вы ввели фамилию: {last_name}, вы ввели емайл: {email}, ваша подписка на новости {news}, ваша подписка на рекламу {promo}</h2>            
+            <pre>
+                Вы ввели имя: {first_name}
+                Вы ввели фамилию: {last_name}
+                Вы ввели емайл: {email}
+                Ваша подписка на новости: {news}
+                Ваша подписка на рекламу: {promo}
+            </pre>                        
             ''')
     else:
         userform = SubscribeForm()
@@ -42,8 +52,13 @@ def work3(request):
         agreement = request.POST.get('agreement')
 
         return HttpResponse(f'''
-            <h2>Вы ввели имя: {name},вы ввели сообщение: {subject}, 
-            вы ввели сообщение: {message}, вы ввели емайл {sender}, ваше согласие {agreement}</h2>            
+            <pre>
+                Вы ввели имя: {name}
+                Вы ввели сообщение: {subject} 
+                Вы ввели сообщение: {message}
+                Вы ввели емайл: {sender}
+                Ваше согласие: {agreement}
+            </pre>            
             ''')
     else:
         userform = ContactForm2()
@@ -59,8 +74,13 @@ def work4(request):
         website = request.POST.get('website')
 
         return HttpResponse(f'''
-            <h2>Вы ввели имя: {name},вы ввели адрес: {address}, вы ввели город: {city}, 
-            вы ввели индекс {post_index}, вы ввели веб-сайт {website}</h2>            
+            <pre>
+                Вы ввели имя: {name}
+                Вы ввели адрес: {address}
+                Вы ввели город: {city} 
+                Вы ввели индекс {post_index}
+                Вы ввели веб-сайт {website}
+            </pre>           
             ''')
     else:
         userform = PublisherForm()
