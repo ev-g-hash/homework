@@ -8,5 +8,5 @@ urlpatterns = [
     path('work3/', views.work3, name='work3'),     
     path('work4/', views.work4, name='work4'),     
     path('work5/', views.work5, name='work5'),     
-    path('work6/', views.work6, name='work6'),     
+    path('work6/', views.work6, name='work6'),   
 ]

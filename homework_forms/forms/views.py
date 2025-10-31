@@ -128,4 +128,3 @@ def work6(request):
         userform = ContactForm3()
         return render(request, 'forms/index6.html', {'form6':userform})
     
-   

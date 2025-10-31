@@ -35,16 +35,10 @@ class CarForm(forms.Form):
     model_year = forms.IntegerField(label='Модельный год', initial=2022)
     price = forms.IntegerField(label='Цена', initial=0)
 
-# class ContactForm3(forms.Form):
-#     name = forms.CharField(label='Имя', help_text="Введите своё имя", error_messages='Ошибка, не введено имя')
-#     email = forms.CharField(label='E-Mail', help_text="Введите ваш E-Mail", error_messages='Ошибка, не введён E-Mail')
-#     message = forms.CharField(label='Сообщение', widget=forms.Textarea, help_text="Введите сообщение", error_messages='Ошибка, не введено сообщение')
-#     promo = forms.BooleanField(label='Подписаться на получение новостных и рекламных рассылок?', required=False)
-
 class ContactForm3(forms.Form):
-    name = forms.CharField(label='Имя', help_text="Введите своё имя")
-    email = forms.CharField(label='E-Mail', help_text="Введите ваш E-Mail")
-    message = forms.CharField(label='Сообщение', widget=forms.Textarea, help_text="Введите сообщение", error_messages={'требуется': 'сообщение'}, attrs={'заполнитель': 'Имя'})
+    name = forms.CharField(label='Имя', help_text="Введите своё имя", error_messages={'required':"Ошибка, не введено имя"})
+    email = forms.CharField(label='E-Mail', help_text="Введите ваш E-Mail", error_messages={'required':"Ошибка, не введён E-Mail"})
+    message = forms.CharField(label='Сообщение', widget=forms.Textarea, help_text="Введите сообщение", error_messages={'required':"Ошибка, не введено сообщение"})
     promo = forms.BooleanField(label='Подписаться на получение новостных и рекламных рассылок?', required=False)
 
 
