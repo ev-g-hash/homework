@@ -7,3 +7,60 @@ django-admin startproject main .
 python manage.py runserver
 python manage.py migrate
 python manage.py startapp shop
+shop/urls.py
+______________________________
+main/settings:
+INSTALLED_APPS = [
+    ...
+    'shop',
+]
+***
+'DIRS': [BASE_DIR / 'templates'],
+***
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+***
+LANGUAGE_CODE = 'ru-ru'
+***
+TIME_ZONE = 'Europe/Samara'
+____________________________________
+корень - static
+корень - templates
+templates/base.html
+shop/templates/shop/index.html
+____________________________________
+main/urls.py
+path('', include('shop.urls')),
+_____________________________________
+shop/urls.py
+
+from django.urls import path
+from shop import views
+urlpatterns = [
+    path('', views.index, name='index'),       
+]
+______________________________________
+shop/views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    return render(request, 'shop/index.html')
+______________________________________
+base.html
+{% load static %}
+
+Привет я базовый шаблон base.html
+
+<hr>
+
+{% block content %}
+{% endblock content %}
+_____________________________________
+{% extends "base.html" %}
+
+{% block content %}
+        привет я индекс.html и я расширяюсь из base.html
+{% endblock content %}
+____________________________________
