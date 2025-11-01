@@ -1,0 +1,9 @@
+python -m venv venv_shop
+venv_shop\Scripts\activate
+pip install django
+python.exe -m pip install --upgrade pip
+pip list
+django-admin startproject main .
+python manage.py runserver
+python manage.py migrate
+python manage.py startapp shop
