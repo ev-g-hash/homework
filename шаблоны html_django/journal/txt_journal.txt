@@ -127,12 +127,63 @@ app_name = 'journal'
 urlpatterns = [
     path('', views.index, name='index'),
     path('topics/', views.topics, name='topics'),
-    path('topics/<unt:topic_id>/', views.topic_id, name='topic_id')
+    path('topics/<unt:topic_id>/', views.topic, name='topic')
 ]
 ____________________________
+forms.py
 
+from django import forms
+from .models import Topic
 
+class TopicForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = ['text']
+        labels = {'text':''}
+________________________________
+urls.py
 
+from django.urls import path
+from . import views
+
+app_name = 'journal'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('topics/', views.topics, name='topics'),
+    path('topics/<int:topic_id>/', views.topic, name='topic'),
+    path('new_topic/', views.new_topic, name='new_topic')
+]
+____________________________
+views.py добавляем
+
+from django.shortcuts import render, redirect
+from .forms import TopicForm
+
+def new_topic(request):
+    if request != 'POST':
+        form = TopicForm
+    else:
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('journal:topics')
+    context = {'form':form}
+    return render(request, 'journal/new_topic', context)
+____________________________
+new_topic.html
+{% extends "base.html" %}
+
+{% block content %}
+    <p>Добавить новую тему:</p>
+
+    <form action="{% url "journal:new_topic" method='post' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="отправить">добавить тему</button>
+{% endblock content %}
+____________________________
+
+далее по книге и смотри сохранения в Git
 
 
 
