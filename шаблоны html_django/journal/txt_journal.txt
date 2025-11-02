@@ -118,8 +118,18 @@ ____________________________
 
 создаём templates/base.html
 ____________________________
+journal/urls.py
 
+from django.urls import path
+from . import views
 
+app_name = 'journal'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('topics/', views.topics, name='topics'),
+    path('topics/<unt:topic_id>/', views.topic_id, name='topic_id')
+]
+____________________________
 
 
 

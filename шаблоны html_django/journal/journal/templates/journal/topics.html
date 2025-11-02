@@ -5,7 +5,8 @@
     <ul>
         {% for topic in topics %}
             <li>
-                {{ topic }}
+                <a href="{% url "journal:topic" topic.id %}">
+                {{ topic }}</a>
             </li>
         {% empty %}
             <li>Темы ещё не созданы</li>        
