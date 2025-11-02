@@ -126,3 +126,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'journal:index'
 LOGOUT_REDIRECT_URL = 'journal:index'
+LOGIN_URL = 'accounts:login'
