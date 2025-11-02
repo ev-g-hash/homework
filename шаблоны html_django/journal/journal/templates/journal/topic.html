@@ -17,6 +17,9 @@
                 <p>
                     {{ entry.text|linebreaks }}
                 </p>
+                <p>
+                    <a href="{% url "journal:edit_entry" entry.id %}">изменить запись</a>
+                </p>
             </li>
             {% empty %}
                 <li>Темы ещё не созданы</li> 
