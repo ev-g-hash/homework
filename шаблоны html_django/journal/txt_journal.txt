@@ -186,10 +186,11 @@ ____________________________
 далее по книге и смотри сохранения в Git
 
 
+_______________________________________
+python manage.py startapp accounts
 
-
-
-
+в конце settings.py
+LOGIN_REDIRECT_URL = 'journal:index'
 
 
 
