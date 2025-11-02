@@ -106,7 +106,18 @@ urlpatterns = [
     path('', views.index, name='index')
 ]
 __________________________________
+journal/views.py
+from django.shortcuts import render
 
+def index(request):
+    return render(request, 'journal/index.html')
+__________________________________
+
+'DIRS': [BASE_DIR / 'templates'],
+____________________________
+
+создаём templates/base.html
+____________________________
 
 
 

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Темы обучения</h2>    
+    <ul>
+        {% for topic in topics %}
+            <li>
+                {{ topic }}
+            </li>
+        {% empty %}
+            <li>Темы ещё не созданы</li>        
+        {% endfor %}
+    </ul>
+{% endblock content %}
