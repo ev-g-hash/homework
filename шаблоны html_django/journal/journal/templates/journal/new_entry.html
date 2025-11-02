@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>
+        <a href="{% url "journal:topic" topic.id %}">{{ topic }}</a>
+    </p>
+
+    <p>Добавить новую запись</p>
+
+    <form action="{% url "journal:new_entry" topic.id %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button name='submit'>добавить запись</button>
+    </form>
+{% endblock content %}

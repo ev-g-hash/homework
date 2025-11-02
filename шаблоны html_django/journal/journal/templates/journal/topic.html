@@ -2,9 +2,12 @@
 
 {% block content %}
 
-    <p>Темы: {{ top_id }}</p>
+    <p>Темы: {{ topic }}</p>
 
     <p>Записи: </p>
+    <p>
+        <a href="{% url "journal:new_entry" topic.id %}">добавить запись</a>
+    </p>
     <ul>
         {% for entry in entries %}
             <li>
