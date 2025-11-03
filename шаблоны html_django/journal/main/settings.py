@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'journal',
     'accounts',
+
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [

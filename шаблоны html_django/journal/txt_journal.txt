@@ -6,6 +6,13 @@ django-admin startproject main .
 python manage.py migrate
 python manage.py runserver
 python manage.py startapp journal
+pip install django-bootstrap5
+____________________________
+settings.py
+INSTALLED_APPS = [
+    ...
+    'django_bootstrap5',
+]
 ____________________________
 models.py
 from django.db import models
