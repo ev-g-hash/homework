@@ -30,8 +30,11 @@ def new_topic(request):
     else:
         form = TopicForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
             return redirect('journal:topics')
+        
     context = {'form':form}
     return render(request, 'journal/new_topic.html', context)
 
