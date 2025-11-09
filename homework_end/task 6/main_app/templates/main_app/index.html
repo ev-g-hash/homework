@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block index %}
+
+<h3>Добавление данных</h3>
+<form method="POST" action="create/">
+    {% csrf_token %}
+          
+    <label for="Введите имя">Введите имя</label>
+    <input type="text" name='name' value={{ user.name }}>
+
+    <label for="Введите возраст"> Введите возраст </label>
+    <input type="number" name='age' value={{ user.age }}>
+
+    <label for="Введите телефон"> Введите телефон </label>
+    <input type="text" name='phone' value={{ user.phone }}>
+
+    <label for="email"> Введите email </label>
+    <input type="text" name='email' value={{ user.email }}>
+          
+    <button type="submit">Сохранить</button>
+</form>
+
+
+<h3>Список пользователей</h3>
+    {% if people %}
+    
+      <table>
+        <thead>
+          <tr>
+            <th width="10%">ID</th>
+            <th width="10%">Имя</th>
+            <th width="10%">Возраст</th>
+            <th width="10%">Телефон</th>
+            <th width="10%">Email</th>
+            <th width="50%">Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in people %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.email }}</td>            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+      Пока нет ни одного пользователя.
+    </div>
+    {% endif %}
+
+</div>
+{% endblock index %}
