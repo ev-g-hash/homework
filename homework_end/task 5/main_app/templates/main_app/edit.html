@@ -1,10 +1,9 @@
-<h3>Введите id пользователя для удаления</h3>
+{% load static %}
+
 <form method="POST">
               {% csrf_token %} 
             <label for="Введите имя"></label>
-            <input type="text" name='name' value="">
+            <input type="text" name='name' value={{ user.name }}>
    
             <input type="submit" name='Сохранить'>
     </form> 
-   
-
