@@ -14,6 +14,7 @@
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
+
       <!-- bootstrap css -->
       <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
       <!-- style css -->
@@ -51,6 +52,7 @@
 
       {% block forms %}
       {% endblock forms %}
+      
       
       <!--  footer -->
       <footer>
@@ -147,5 +149,8 @@
            document.getElementById("myNav").style.width = "0%";
          }
       </script>
+
+      {% comment %} <script src="{% url "js/script.js" %}"></script> {% endcomment %}
+
    </body>
 </html>

@@ -32,3 +32,6 @@ def forms(request):
     else:
         userform = ContactForm()
         return render(request, 'shop/forms.html', {'form':userform})
+    
+def forms2(request):
+    return render(request, 'shop/forms2.html')
