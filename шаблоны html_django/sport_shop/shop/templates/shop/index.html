@@ -9,10 +9,10 @@
       <div id="myNav" class="menu_sid">
          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
          <div class="menu_sid-content">
-            <a href="#protien">Our Protien</a>
-            <a href="#about">About Us</a>
-            <a href="#testimonial">Testimonial</a>
-            <a href="#contact">Contact Us</a>
+            <a href="{% url "index" %}">Our Protien</a>
+            <a href="{% url "aboutas" %}">О нас</a>
+            <a href="{% url "readmore" %}">Подробнее</a>
+            <a href="{% url "forms" %}">Заказать обратный звонок</a>
          </div>
       </div>
       <!-- header -->
@@ -49,8 +49,8 @@
                   <div class="row">
                      <div class="col-md-5">
                         <div class="banner_text">
-                           <h1>Pro<br> Body Builder Protien</h1>
-                           <a class="get_btn" href="#about" role="button" >FeedBack</a> <a class="get_btn" href="#contact" role="button">Read More</a>
+                           <h1>Протеин Боди Билдера</h1>
+                           <a class="get_btn" href="{% url "forms" %}" role="button" >Заказать звонок</a> <a class="get_btn" href="{% url "readmore" %}" role="button">Подробнее</a>
                            
                         </div>
                      </div>
@@ -72,7 +72,7 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>Our Protien</h2>
+                     <h2>Наш протеин</h2>
                   </div>
                </div>
             </div>
@@ -125,7 +125,7 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>Testimonial</h2>
+                     <h2>Рекомендации и отзывы</h2>
                   </div>
                </div>
             </div>
@@ -150,8 +150,8 @@
                                     <div class="row d_flex">
                                        <div class="col-md-11">
                                           <i><img src="{% static "images/costu.png" %}" alt="#"/></i>
-                                          <span>Consectetur</span>
-                                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </p>
+                                          <span>Отзыв 1</span>
+                                          <p>1 Мне жаль слышать о вашей боли, но мне так жаль слышать о вашей тяжелой работе и вашей боли. По крайней мере, я хотел этого </p>
                                        </div>
                                     </div>
                                  </div>
@@ -163,8 +163,8 @@
                                     <div class="row d_flex">
                                        <div class="col-md-11">
                                           <i><img src="{% static "images/costu.png" %}" alt="#"/></i>
-                                          <span>Consectetur</span>
-                                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </p>
+                                          <span>Отзыв 2</span>
+                                          <p>2 Мне жаль слышать о вашей боли, но мне так жаль слышать о вашей тяжелой работе и вашей боли. По крайней мере, я хотел этого </p>
                                        </div>
                                     </div>
                                  </div>
@@ -176,8 +176,8 @@
                                     <div class="row d_flex">
                                        <div class="col-md-11">
                                           <i><img src="{% static "images/costu.png" %}" alt="#"/></i>
-                                          <span>Consectetur</span>
-                                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </p>
+                                          <span>Отзыв 3</span>
+                                          <p>3 Мне жаль слышать о вашей боли, но мне так жаль слышать о вашей тяжелой работе и вашей боли. По крайней мере, я хотел этого </p>
                                        </div>
                                     </div>
                                  </div>

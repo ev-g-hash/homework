@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block forms %}
+<div class="row">             
+   <a class="get_btn" href="{% url "index" %}" role="button" >На главную</a>                            
+</div> 
+
+<div id="contact" class="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="titlepage">
+                    <h2>Заказать обратный звонок</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+
+                <form id="request" class="main_form" method="POST">
+                    {% csrf_token %} 
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            {{ form.as_div }}                           
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <input class="send_btn" type="submit" value="отправить">                           
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock forms %}
