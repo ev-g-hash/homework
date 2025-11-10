@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'main_app'  # Опционально: пространство имён
+# app_name = 'main_app'  # Опционально: пространство имён
 
 urlpatterns = [
     path('', views.index, name='index'),                    # Главная страница

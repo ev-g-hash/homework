@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать профиль</title>
+</head>
+<body>
+    <h1>Редактировать профиль: {{ profile_data.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>Имя:</label><br>
+            <input type="text" name="name" value="{{ profile_data.name }}" required>
+        </p>
+        <p>
+            <label>Возраст:</label><br>
+            <input type="number" name="age" value="{{ profile_data.age }}" required>
+        </p>
+        <p>
+            <label>Телефон:</label><br>
+            <input type="text" name="phone" value="{{ profile_data.phone }}">
+        </p>
+        <p>
+            <label>Email:</label><br>
+            <input type="email" name="email" value="{{ profile_data.email }}" required>
+        </p>
+        <button type="submit">Сохранить</button>
+    </form>
+    <p><a href="{% url 'user_profile' profile_data.id %}">Отмена</a></p>
+</body>
+</html>

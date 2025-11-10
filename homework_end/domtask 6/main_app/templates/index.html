@@ -53,7 +53,7 @@
 
     <!-- Кнопка "Добавить пользователя" -->
     <div class="text-center">
-      <a href="{% url 'main_app:create_user' %}" class="btn btn-success btn-lg btn-create">
+      <a href="{% url 'create_user' %}" class="btn btn-success btn-lg btn-create">
         <i class="bi bi-person-plus"></i> Добавить пользователя
       </a>
     </div>
@@ -80,7 +80,7 @@
               {% if user.email %}<div><i class="bi bi-envelope"></i> {{ user.email }}</div>{% endif %}
             </td>
             <td class="text-center">
-              <a href="{% url 'main_app:edit_profile' user.id %}" class="btn btn-outline-primary btn-sm btn-edit">
+              <a href="{% url 'edit_profile' user.id %}" class="btn btn-outline-primary btn-sm btn-edit">
                 <i class="bi bi-pencil"></i> Редактировать
               </a>
             </td>

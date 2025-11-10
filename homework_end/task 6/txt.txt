@@ -17,8 +17,8 @@
 
 ____________________________________________________________
 
-python -m venv venvtask6
-venvtask6\Scripts\activate
+python -m venv venv_task
+venv_task\Scripts\activate
 python -m pip install --upgrade pip
 pip install django
 django-admin startproject main .
@@ -45,12 +45,6 @@ urlpatterns = [
     path('', include('main_app.urls')),
 ]
 ____________________________________________________________
-admin.py
-from django.contrib import admin
-from .models import User
-
-admin.site.register(User)
-
 AI - ассистент
 *****
 Напишите функцию-представление, для приложения main_app, с именем edit_profile, 
@@ -75,6 +69,10 @@ profile_data эту запись из модели User и передать её
 выведи все получившиеся коды 
 *****
 _______________________________________________________________________________
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+во всех html файлах убери урлы
+в файле urls.py - app_name = 'main_app'  # пространство имён - закоментить
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 models.py
 ********
@@ -259,7 +257,7 @@ templates/edit_profile.html
 </body>
 </html>
 _______________________________________________
-templates/user_profile.htm
+templates/user_profile.html
 **************************
 <!DOCTYPE html>
 <html>

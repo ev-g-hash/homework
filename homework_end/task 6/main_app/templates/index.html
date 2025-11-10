@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная</title>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{% url 'user_profile' user.id %}">{{ user.name }}</a>
+                | <a href="{% url 'edit_profile' user.id %}">Редактировать</a>
+            </li>
+        {% empty %}
+            <li>Пользователи отсутствуют</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'create_user' %}">Добавить нового пользователя</a></p>
+</body>
+</html>

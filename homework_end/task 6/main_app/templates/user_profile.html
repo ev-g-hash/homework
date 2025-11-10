@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль пользователя</title>
+</head>
+<body>
+    <h1>Профиль: {{ profile_data.name }}</h1>
+    <p><strong>Имя:</strong> {{ profile_data.name }}</p>
+    <p><strong>Возраст:</strong> {{ profile_data.age }}</p>
+    <p><strong>Телефон:</strong> {{ profile_data.phone|default:"—" }}</p>
+    <p><strong>Email:</strong> {{ profile_data.email }}</p>
+    <p>
+        <a href="{% url 'edit_profile' profile_data.id %}">Редактировать</a> |
+        <a href="{% url 'index' %}">К списку</a>
+    </p>
+</body>
+</html>
