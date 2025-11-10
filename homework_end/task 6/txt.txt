@@ -1,0 +1,569 @@
+Задача 6
+Задание:
+Напишите функцию-представление, для приложения main_app, с именем edit_profile, 
+которая будет принимать параметр id и изменять запись модели User с этим id.
+
+Если запись с этим id существует и метод запроса POST:
+Необходимо принять параметры name, age, phone, email HTTP-запроса методом POST и изменить эту запись.
+После сохранения записи необходимо выполнить временный редирект 
+в директорию профиля пользователя /user_profile/ (имя маршрута 'user_profile').
+
+Если запись с этим id существует и метод запроса не POST:
+Необходимо вернуть содержимое шаблона edit_profile.html, 
+предварительно получив в переменную profile_data эту запись из модели User и передать её в шаблон.
+
+Если запись не существует:
+Необходимо вернуть сообщение о ошибке 404 с текстом <h2>User profile with id=принятый_id not found</h2>.
+
+____________________________________________________________
+
+python -m venv venvtask6
+venvtask6\Scripts\activate
+python -m pip install --upgrade pip
+pip install django
+django-admin startproject main .
+python manage.py runserver
+python manage.py migrate
+python manage.py startapp main_app 
+____________________________________________________________
+main_app/urls.py
+____________________________________________________________
+settings.py
+INSTALLED_APPS = [
+    ...
+    'main_app',
+]
+
+___________________________________________________________
+urls.py - основной
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main_app.urls')),
+]
+____________________________________________________________
+admin.py
+from django.contrib import admin
+from .models import User
+
+admin.site.register(User)
+
+AI - ассистент
+*****
+Напишите функцию-представление, для приложения main_app, с именем edit_profile, 
+которая будет принимать параметр id и изменять запись модели User с этим id. 
+Если запись с этим id существует и метод запроса POST: Необходимо принять 
+параметры name, age, phone, email HTTP-запроса методом POST и изменить 
+эту запись. После сохранения записи необходимо выполнить временный редирект 
+в директорию профиля пользователя /user_profile/ (имя маршрута 'user_profile'). 
+Если запись с этим id существует и метод запроса не POST: Необходимо вернуть 
+содержимое шаблона edit_profile.html, предварительно получив в переменную 
+profile_data эту запись из модели User и передать её в шаблон. 
+Если запись не существует: Необходимо вернуть сообщение о ошибке 404 
+с текстом <h2>User profile with id=принятый_id not found</h2>.
+*****
+добавь к этому коду реализацию views.py для user_profile
+*****
+сформируй к этим кодам models.py
+*****
+добавь к этому проекту файл index.html с кнопкой перехода на edit_profile.html, 
+добавить путь urls.py, views.py и во views добавь представление create_user
+для добавления пользователей
+выведи все получившиеся коды 
+*****
+_______________________________________________________________________________
+
+models.py
+********
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    age = models.IntegerField(verbose_name="Возраст")
+    phone = models.CharField(max_length=15, blank=True, null=True, verbose_name="Телефон")
+    email = models.EmailField(verbose_name="Email")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+        db_table = 'user'
+____________________________________________________________
+views.py
+********
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from .models import User
+
+def index(request):
+    users = User.objects.all()
+    return render(request, 'index.html', {'users': users})
+
+def create_user(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        age = request.POST.get('age')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+
+        # Создаем нового пользователя
+        user = User.objects.create(
+            name=name,
+            age=age,
+            phone=phone,
+            email=email
+        )
+        user.save()
+
+        # Редирект на профиль нового пользователя
+        return redirect('user_profile', id=user.id)
+
+    return render(request, 'create_user.html')
+
+def edit_profile(request, id):
+    user = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        user.name = request.POST.get('name')
+        user.age = request.POST.get('age')
+        user.phone = request.POST.get('phone')
+        user.email = request.POST.get('email')
+        user.save()
+
+        return redirect('user_profile', id=user.id)
+
+    else:
+        profile_data = user
+        return render(request, 'edit_profile.html', {'profile_data': profile_data})
+
+def user_profile(request, id):
+    profile_data = get_object_or_404(User, id=id)
+    return render(request, 'user_profile.html', {'profile_data': profile_data})
+____________________________________________________________
+urls.py (в приложении main_app/urls.py)
+***************************************
+from django.urls import path
+from . import views
+
+app_name = 'main_app'  # пространство имён
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('create/', views.create_user, name='create_user'),
+    path('edit_profile/<int:id>/', views.edit_profile, name='edit_profile'),
+    path('user_profile/<int:id>/', views.user_profile, name='user_profile'),
+]
+____________________________________________________________
+Убедитесь, что вы подключили main_app.urls в главный urls.py проекта:
+**********************************************************************
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main_app.urls')),
+]
+_______________________________________________
+4. Шаблоны
+templates/index.html
+*************************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная</title>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{% url 'main_app:user_profile' user.id %}">{{ user.name }}</a>
+                | <a href="{% url 'main_app:edit_profile' user.id %}">Редактировать</a>
+            </li>
+        {% empty %}
+            <li>Пользователи отсутствуют</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'main_app:create_user' %}">Добавить нового пользователя</a></p>
+</body>
+</html>
+_______________________________________________
+templates/create_user.html
+**************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавить пользователя</title>
+</head>
+<body>
+    <h1>Добавить нового пользователя</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>Имя:</label><br>
+            <input type="text" name="name" required>
+        </p>
+        <p>
+            <label>Возраст:</label><br>
+            <input type="number" name="age" required>
+        </p>
+        <p>
+            <label>Телефон:</label><br>
+            <input type="text" name="phone">
+        </p>
+        <p>
+            <label>Email:</label><br>
+            <input type="email" name="email" required>
+        </p>
+        <button type="submit">Создать</button>
+    </form>
+    <p><a href="{% url 'main_app:index' %}">Назад</a></p>
+</body>
+</html>
+_______________________________________________
+templates/edit_profile.html
+***************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать профиль</title>
+</head>
+<body>
+    <h1>Редактировать профиль: {{ profile_data.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>Имя:</label><br>
+            <input type="text" name="name" value="{{ profile_data.name }}" required>
+        </p>
+        <p>
+            <label>Возраст:</label><br>
+            <input type="number" name="age" value="{{ profile_data.age }}" required>
+        </p>
+        <p>
+            <label>Телефон:</label><br>
+            <input type="text" name="phone" value="{{ profile_data.phone }}">
+        </p>
+        <p>
+            <label>Email:</label><br>
+            <input type="email" name="email" value="{{ profile_data.email }}" required>
+        </p>
+        <button type="submit">Сохранить</button>
+    </form>
+    <p><a href="{% url 'main_app:user_profile' profile_data.id %}">Отмена</a></p>
+</body>
+</html>
+_______________________________________________
+templates/user_profile.htm
+**************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль пользователя</title>
+</head>
+<body>
+    <h1>Профиль: {{ profile_data.name }}</h1>
+    <p><strong>Имя:</strong> {{ profile_data.name }}</p>
+    <p><strong>Возраст:</strong> {{ profile_data.age }}</p>
+    <p><strong>Телефон:</strong> {{ profile_data.phone|default:"—" }}</p>
+    <p><strong>Email:</strong> {{ profile_data.email }}</p>
+    <p>
+        <a href="{% url 'main_app:edit_profile' profile_data.id %}">Редактировать</a> |
+        <a href="{% url 'main_app:index' %}">К списку</a>
+    </p>
+</body>
+</html>
+_______________________________________________
+Убедитесь, что:
+Папка templates находится в корне приложения main_app или указана в TEMPLATES в settings.py.
+Если шаблоны не находятся — добавьте в settings.py:
+****************************************************
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'main_app/templates'],  # или 'templates' в корне проекта
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+____________________________________________________________
+Выполните миграции
+******************
+python manage.py makemigrations
+python manage.py migrate
+
+Готово!
+Теперь ваш проект:
+
+Отображает список пользователей (index)
+Позволяет создавать (create_user)
+Редактировать (edit_profile)
+Просматривать (user_profile)
+Все ссылки работают, формы обрабатываются, ошибки 404 обрабатываются автоматически.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=20)
+    age = models.IntegerField()
+    phone = models.CharField(max_length=15)
+    email = models.CharField(max_length=30)
+____________________________________________________________
+views.py
+from django.shortcuts import redirect, render 
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from .models import User
+from django.urls import reverse
+
+def index(request):
+    people = User.objects.all()    
+    return render(request, 'main_app/index.html', {'people': people})
+
+# Добавление данных
+def create(request):
+    if request.method == 'POST':
+        user = User()
+        user.name = request.POST.get('name')        
+        user.age = request.POST.get('age')        
+        user.phone = request.POST.get('phone')        
+        user.email = request.POST.get('email')        
+        user.save()
+    return HttpResponseRedirect('/')
+____________________________________________________________
+admi.py
+from django.contrib import admin
+from .models import User
+
+admin.site.register(User)
+____________________________________________________________
+main_app/urls.py
+from django.urls import path
+from main_app import views
+
+urlpatterns = [
+    path('', views.index, name='index'),    
+    path('create/', views.create),         
+]
+____________________________________________________________
+python manage.py makemigrations 
+python manage.py migrate
+____________________________________________________________
+static
+____________________________________________________________
+index.html
+
+{% extends "base.html" %}
+
+{% block index %}
+
+<h3>Добавление данных</h3>
+<form method="POST" action="create/">
+    {% csrf_token %}
+          
+    <label for="Введите имя">Введите имя</label>
+    <input type="text" name='name' value={{ user.name }}>
+
+    <label for="Введите возраст"> Введите возраст </label>
+    <input type="number" name='age' value={{ user.age }}>
+
+    <label for="Введите телефон"> Введите телефон </label>
+    <input type="text" name='phone' value={{ user.phone }}>
+
+    <label for="email"> Введите email </label>
+    <input type="text" name='email' value={{ user.email }}>
+          
+    <button type="submit">Сохранить</button>
+</form>
+
+
+<h3>Список пользователей</h3>
+    {% if people %}
+    
+      <table>
+        <thead>
+          <tr>
+            <th width="10%">ID</th>
+            <th width="10%">Имя</th>
+            <th width="10%">Возраст</th>
+            <th width="10%">Телефон</th>
+            <th width="10%">Email</th>
+            <th width="50%">Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in people %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.email }}</td>            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+      Пока нет ни одного пользователя.
+    </div>
+    {% endif %}
+
+</div>
+{% endblock index %}
+
+
+
+
+
+
+
+
+----------------------------------------------------------
+вьюха
+-----------------------------------------------------
+def edit_profile(request, id):    
+    try:
+        user = User1.objects.get(id=id)
+    except User1.DoesNotExist:
+        return HttpResponseNotFound(f"User profile with not found")
+
+    if request.method == 'POST':        
+        user.name = request.POST.get('name')
+        user.age = request.POST.get('age')
+        user.phone = request.POST.get('phone')
+        user.email = request.POST.get('email')
+        user.save()
+        return render(request, 'main_app/index1.html') 
+    else:
+        return render(request, 'main_app/edit_profile.html', {'user': user}) 
+------------------------
+# // Удаление данных через POST - запрос
+# def delete(request, id):
+#     user = User.objects.get(id=id)
+   
+#     try:
+#         if request.method == 'POST': 
+#             user.id = request.POST.get('name')
+#             user.delete()                
+#             return HttpResponseRedirect("/")
+            
+#         else:
+#              return render(request, 'main_app/user_list.html', {'user': user}) 
+    
+#     except Exception as e:        
+#         return render(request, 'main_app/user_list2.html')
+-------------------------
+# // Изменение данных
+# def edit(request, id):
+#     try:
+#         user = User.objects.get(id=id)
+#     except User.DoesNotExist:
+#         return HttpResponseNotFound(f"User profile with not found")
+
+#     if request.method == 'POST':        
+#         user.name = request.POST.get('name')
+#         user.save()
+#         return HttpResponseRedirect("/")
+#     else:
+#         return render(request, 'main_app/edit.html', {'user': user}) 
+-------------------------------
+юрэлка
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('index1', views.index1, name='index1'),
+    path('create/', views.create),
+    path('create1/', views.create1),
+    path('edit/<int:id>/', views.edit),
+    # path('delete/<int:id>/', views.delete, name='delete'), - для POST запроса
+    path('delete_profile/<int:id>/', views.delete_profile, name='delete_profile'),
+    path('user_list/', views.user_list, name='user_list'),
+    path('edit_profile/<int:id>/', views.edit_profile, name='edit_profile'),    
+]
+------------------------------------------
+edit_profile.html
+{% load static %}
+
+  <h1>Редактировать профиль</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <label>Имя</label>
+    <input type="text" value="{{ user.name }}" required>
+
+    <label>Возраст</label>
+    <input type="number" value="{{ user.age }}" required>
+
+    <label>Телефон</label>
+    <input type="text" value="{{ user.phone }}" required>
+
+    <label>Email</label>
+    <input type="email" value="{{ user.email }}" required>
+
+    <button type="submit">Сохранить</button>
+  </form>
+  ---------------------------
