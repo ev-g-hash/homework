@@ -17,8 +17,8 @@
 
 ____________________________________________________________
 
-python -m venv venv_task6
-venv_task6\Scripts\activate
+python -m venv venv_domtask6
+venv_domtask6\Scripts\activate
 python -m pip install --upgrade pip
 pip install django
 django-admin startproject main .
@@ -46,6 +46,68 @@ urlpatterns = [
     path('', include('main_app.urls')),
 ]
 ____________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+
 from django.db import models
 
 class User(models.Model):
