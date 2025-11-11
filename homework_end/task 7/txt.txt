@@ -1,19 +1,19 @@
 Задача 7
 Задание:
-Напишите функцию-представление create_profile для приложения main_app.
+Напишите функцию-представление create_profile во views для приложения main_app.
 Функция должна принимать POST-запрос с данными name, age, phone, email, 
-выполнять валидацию формы, и сохранять очищенные данные в новой записи модели User.
+выполнять валидацию формы, и сохранять их.
 После добавления записи или в случае ошибки валидации формы, необходимо выполнить 
-временный редирект в директорию списка пользователей /user_list/ (имя маршрута 'user_list').
+временный редирект в директорию списка пользователей /user_list/ (имя маршрута 'user_list') 
+и создай к нему шаблон user_list.html.
 Для методов запроса отличных от POST, 
 необходимо вывести шаблон create_profile.html, предварительно 
-передав в шаблон форму UserForm в виде переменной user_form
-********
-напиши к этой функции-представлении следующие необходимые файлы
-models.py, urls.py, admin.py, views.py и html файлы 
-*********
-добавь туда кнопки для перехода между html файлами, оформи css стилем
-и выведи ещё раз итоговые коды со всеми файлами
+передав в шаблон user_form.html форму UserForm в виде переменной user_form
+добавь шаблон index.html и напиши для этого шаблона функцию-представление во views.
+Создай к этому проекту все необходимые файлы models.py, urls.py, admin.py, views.py
+добавь туда кнопки для перехода между index.html, 
+create_profile.html, user_list.html файлами, оформи css стилем
+и выведи итоговые коды со всеми файлами
 ____________________________________________________________
 
 python -m venv venv_task7
@@ -28,14 +28,35 @@ ____________________________________________________________
 main_app/urls.py
 ____________________________________________________________
 settings.py
-INSTALLED_APPS = [
+INSTALLED_APPS = [    
     ...
+
     'main_app',
 ]
 
+почитай имеет ли значение в начале или в конце
 ____________________________________________________________
-urls.py - основной
+запрос ассистенту
+*****************
+напиши
 
+Напиши функцию-представление create_profile во views для приложения main_app.
+Функция должна принимать POST-запрос с данными name, age, phone, email, 
+выполнять валидацию формы, и сохранять её.
+В случае ошибки валидации формы, необходимо выполнить 
+временный редирект в директорию списка пользователей user_list.
+Для методов запроса отличных от POST,необходимо вывести шаблон create_profile.html, 
+предварительно передав в шаблон user_form.html форму UserForm в виде переменной user_form.
+Создай шаблоны для проекта index.html,user_form.html, user_list.html, create_profile.html.
+Создай к этому проекту все необходимые файлы models.py, urls.py, admin.py, views.py
+напиши основной urls.py.  
+Так же во views напиши функции-представления по добавлению и удалению пользователя,
+при необходимости создай дополнительные шаблоны.
+Всё должно быть максимально просто.
+Выведи итоговые коды со всеми файлами.
+____________________________________________________________
+основной urls.py
+****************
 from django.contrib import admin
 from django.urls import path, include
 
@@ -44,513 +65,11 @@ urlpatterns = [
     path('', include('main_app.urls')),
 ]
 ____________________________________________________________
-models.py
-*********
-from django.db import models
 
-class User(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Имя")
-    age = models.IntegerField(verbose_name="Возраст")
-    phone = models.CharField(max_length=15, verbose_name="Телефон")
-    email = models.EmailField(verbose_name="Электронная почта")
+create_profile
 
-    def __str__(self):
-        return self.name
 
-    class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
-____________________________________________________________
-forms.py
-********
-from django import forms
-from .models import User
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['name', 'age', 'phone', 'email']
-        widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Введите имя'}),
-            'age': forms.NumberInput(attrs={'placeholder': 'Введите возраст'}),
-            'phone': forms.TextInput(attrs={'placeholder': 'Введите телефон'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Введите email'}),
-        }
-_______________________________________________
-views.py
-********
-from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
-from .forms import UserForm
-from .models import User
 
 
-@require_http_methods(["GET", "POST"])
-def create_profile(request):
-    if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('main_app:user_list')
-    else:
-        form = UserForm()
-    return render(request, 'create_profile.html', {'user_form': form})
 
-
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'user_list.html', {'users': users})
-_______________________________________________
-urls.py (в main_app)
-********************
-from django.urls import path
-from . import views
-
-app_name = 'main_app'
-
-urlpatterns = [
-    path('create/', views.create_profile, name='create_profile'),
-    path('user_list/', views.user_list, name='user_list'),
-]
-_______________________________________________
-admin.py
-********
-from django.contrib import admin
-from .models import User
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['name', 'age', 'phone', 'email']
-    search_fields = ['name', 'email']
-_______________________________________________
-templates/base.html (базовый шаблон — добавим для удобства)
-***********************************************************
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Главная{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .nav {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background: #2980b9;
-        }
-        .btn-danger {
-            background: #e74c3c;
-        }
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        form {
-            margin: 20px 0;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        input[type="text"],
-        input[type="number"],
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background: #219a52;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #ecf0f1;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-        }
-        .empty {
-            color: #7f8c8d;
-            font-style: italic;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="nav">
-            <a href="{% url 'main_app:create_profile' %}" class="btn">Создать профиль</a>
-            <a href="{% url 'main_app:user_list' %}" class="btn">Список пользователей</a>
-        </div>
-        {% block content %}{% endblock %}
-    </div>
-</body>
-</html>
-_______________________________________________
-templates/create_profile.html
-*****************************
-{% extends "base.html" %}
-{% block title %}Создать профиль{% endblock %}
-
-{% block content %}
-<h1>Создать профиль</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    <button type="submit">Сохранить профиль</button>
-</form>
-{% endblock %}
-_______________________________________________
-templates/user_list.html
-************************
-{% extends "base.html" %}
-{% block title %}Список пользователей{% endblock %}
-
-{% block content %}
-<h1>Список пользователей</h1>
-{% if users %}
-<ul>
-    {% for user in users %}
-    <li>
-        <strong>{{ user.name }}</strong>, {{ user.age }} лет, 
-        тел: {{ user.phone }}, email: {{ user.email }}
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p class="empty">Пользователи отсутствуют.</p>
-{% endif %}
-{% endblock %}
-_______________________________________________
-Главный urls.py проекта (например, myproject/urls.py)
-*****************************************************
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('main_app.urls')),
-]
-_______________________________________________
-✅ Что теперь работает:
-✅ Страница /create/ — форма создания профиля
-✅ Страница /user_list/ — список всех пользователей
-✅ Кнопки навигации в шапке
-✅ Стилизованный интерфейс (CSS через <style>)
-✅ Автоматический редирект после POST
-✅ Валидация формы
-✅ Доступ через админку
-_______________________________________________
-Убедитесь, что папка templates находится в main_app, 
-а в settings.py проекта включена поддержка шаблонов:
-******************************************************
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'main_app/templates'],  # или аналогично
-        'APP_DIRS': True,
-        # ...
-    },
-]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////
-
-from django.db import models
-
-class User(models.Model):
-    name = models.CharField(max_length=20)
-    age = models.IntegerField()
-    phone = models.CharField(max_length=15)
-    email = models.CharField(max_length=30)
-____________________________________________________________
-views.py
-from django.shortcuts import redirect, render 
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from .models import User
-from django.urls import reverse
-
-def index(request):
-    people = User.objects.all()    
-    return render(request, 'main_app/index.html', {'people': people})
-
-# Добавление данных
-def create(request):
-    if request.method == 'POST':
-        user = User()
-        user.name = request.POST.get('name')        
-        user.age = request.POST.get('age')        
-        user.phone = request.POST.get('phone')        
-        user.email = request.POST.get('email')        
-        user.save()
-    return HttpResponseRedirect('/')
-____________________________________________________________
-admi.py
-from django.contrib import admin
-from .models import User
-
-admin.site.register(User)
-____________________________________________________________
-main_app/urls.py
-from django.urls import path
-from main_app import views
-
-urlpatterns = [
-    path('', views.index, name='index'),    
-    path('create/', views.create),         
-]
-____________________________________________________________
-python manage.py makemigrations 
-python manage.py migrate
-____________________________________________________________
-static
-____________________________________________________________
-index.html
-
-{% extends "base.html" %}
-
-{% block index %}
-
-<h3>Добавление данных</h3>
-<form method="POST" action="create/">
-    {% csrf_token %}
-          
-    <label for="Введите имя">Введите имя</label>
-    <input type="text" name='name' value={{ user.name }}>
-
-    <label for="Введите возраст"> Введите возраст </label>
-    <input type="number" name='age' value={{ user.age }}>
-
-    <label for="Введите телефон"> Введите телефон </label>
-    <input type="text" name='phone' value={{ user.phone }}>
-
-    <label for="email"> Введите email </label>
-    <input type="text" name='email' value={{ user.email }}>
-          
-    <button type="submit">Сохранить</button>
-</form>
-
-
-<h3>Список пользователей</h3>
-    {% if people %}
-    
-      <table>
-        <thead>
-          <tr>
-            <th width="10%">ID</th>
-            <th width="10%">Имя</th>
-            <th width="10%">Возраст</th>
-            <th width="10%">Телефон</th>
-            <th width="10%">Email</th>
-            <th width="50%">Действие</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for user in people %}
-          <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.phone }}</td>
-            <td>{{ user.email }}</td>            
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-    <div class="alert alert-info" role="alert">
-      Пока нет ни одного пользователя.
-    </div>
-    {% endif %}
-
-</div>
-{% endblock index %}
-
-
-
-
-
-
-
-
-----------------------------------------------------------
-вьюха
------------------------------------------------------
-def edit_profile(request, id):    
-    try:
-        user = User1.objects.get(id=id)
-    except User1.DoesNotExist:
-        return HttpResponseNotFound(f"User profile with not found")
-
-    if request.method == 'POST':        
-        user.name = request.POST.get('name')
-        user.age = request.POST.get('age')
-        user.phone = request.POST.get('phone')
-        user.email = request.POST.get('email')
-        user.save()
-        return render(request, 'main_app/index1.html') 
-    else:
-        return render(request, 'main_app/edit_profile.html', {'user': user}) 
-------------------------
-# // Удаление данных через POST - запрос
-# def delete(request, id):
-#     user = User.objects.get(id=id)
-   
-#     try:
-#         if request.method == 'POST': 
-#             user.id = request.POST.get('name')
-#             user.delete()                
-#             return HttpResponseRedirect("/")
-            
-#         else:
-#              return render(request, 'main_app/user_list.html', {'user': user}) 
-    
-#     except Exception as e:        
-#         return render(request, 'main_app/user_list2.html')
--------------------------
-# // Изменение данных
-# def edit(request, id):
-#     try:
-#         user = User.objects.get(id=id)
-#     except User.DoesNotExist:
-#         return HttpResponseNotFound(f"User profile with not found")
-
-#     if request.method == 'POST':        
-#         user.name = request.POST.get('name')
-#         user.save()
-#         return HttpResponseRedirect("/")
-#     else:
-#         return render(request, 'main_app/edit.html', {'user': user}) 
--------------------------------
-юрэлка
-urlpatterns = [
-    path('', views.index, name='index'),
-    path('index1', views.index1, name='index1'),
-    path('create/', views.create),
-    path('create1/', views.create1),
-    path('edit/<int:id>/', views.edit),
-    # path('delete/<int:id>/', views.delete, name='delete'), - для POST запроса
-    path('delete_profile/<int:id>/', views.delete_profile, name='delete_profile'),
-    path('user_list/', views.user_list, name='user_list'),
-    path('edit_profile/<int:id>/', views.edit_profile, name='edit_profile'),    
-]
-------------------------------------------
-edit_profile.html
-{% load static %}
-
-  <h1>Редактировать профиль</h1>
-  <form method="POST">
-    {% csrf_token %}
-    <label>Имя</label>
-    <input type="text" value="{{ user.name }}" required>
-
-    <label>Возраст</label>
-    <input type="number" value="{{ user.age }}" required>
-
-    <label>Телефон</label>
-    <input type="text" value="{{ user.phone }}" required>
-
-    <label>Email</label>
-    <input type="email" value="{{ user.email }}" required>
-
-    <button type="submit">Сохранить</button>
-  </form>
-  ---------------------------
