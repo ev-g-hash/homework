@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Список пользователей{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Список пользователей ({{ users.count }})</h2>
+    <div>
+        <a href="{% url 'create_profile' %}" class="btn">Создать профиль</a>
+        <a href="{% url 'add_user' %}" class="btn" style="margin-left: 5px; background: #28a745;">Добавить пользователя</a>
+    </div>
+</div>
+
+{% if users %}
+    {% for user in users %}
+    <div class="user-card">
+        <h3>{{ user.name }}</h3>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Телефон:</strong> {{ user.phone }}</p>
+        <p><strong>Возраст:</strong> {{ user.age }} лет</p>
+        <p><strong>Создан:</strong> {{ user.created_at|date:"d.m.Y H:i" }}</p>
+        <form method="post" action="{% url 'delete_user' user.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Удалить пользователя {{ user.name }}?')">
+                Удалить
+            </button>
+        </form>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>Пользователей пока нет. <a href="{% url 'create_profile' %}">Создайте первого пользователя!</a></p>
+{% endif %}
+{% endblock %}

@@ -56,7 +56,7 @@ ____________________________________________________________
 Выведи итоговые коды со всеми файлами.
 ____________________________________________________________
 основной urls.py
-****************
+
 from django.contrib import admin
 from django.urls import path, include
 
@@ -65,9 +65,186 @@ urlpatterns = [
     path('', include('main_app.urls')),
 ]
 ____________________________________________________________
+main_app/models.py
+******************
+from django.db import models
 
-create_profile
+class UserProfile(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    phone = models.CharField(max_length=15)
+    email = models.EmailField()
 
+    def __str__(self):
+        return self.name
+____________________________________________________________
+main_app/forms.py
+*****************
+from django import forms
+from .models import UserProfile
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['name', 'age', 'phone', 'email']
+____________________________________________________________
+main_app/admin.py
+*****************
+from django.contrib import admin
+from .models import UserProfile
+
+admin.site.register(UserProfile)
+____________________________________________________________
+main_app/views.py
+*****************
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .models import UserProfile
+from .forms import UserForm
+
+def index(request):
+    return render(request, 'index.html')
+
+def user_list(request):
+    users = UserProfile.objects.all()
+    return render(request, 'user_list.html', {'users': users})
+
+def create_profile(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('user_list')  # постоянный редирект после успешного сохранения
+        else:
+            # Ошибка валидации — временный редирект на список
+            return redirect('user_list')  # можно оставить так или передать ошибки в шаблон
+    else:
+        form = UserForm()
+    return render(request, 'create_profile.html', {'user_form': form})
+
+def delete_user(request, user_id):
+    user = UserProfile.objects.get(id=user_id)
+    user.delete()
+    return redirect('user_list')
+
+____________________________________________________________
+Примечание: Редирект при ошибке валидации POST — сделан временным (redirect), 
+как и просили. Но обычно лучше отображать ошибки на той же странице. 
+Здесь мы упростили: при любой ошибке — редирект на user_list.
+____________________________________________________________
+main_app/urls.py
+****************
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('users/', views.user_list, name='user_list'),
+    path('create/', views.create_profile, name='create_profile'),
+    path('delete/<int:user_id>/', views.delete_user, name='delete_user'),
+]
+____________________________________________________________
+Основной main/urls.py
+********************
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main_app.urls')),
+]
+____________________________________________________________
+templates/index.html
+********************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная</title>
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <a href="{% url 'user_list' %}">Список пользователей</a><br>
+    <a href="{% url 'create_profile' %}">Создать профиль</a>
+</body>
+</html>
+____________________________________________________________
+templates/user_form.htm
+**********************
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ user_form.as_table }}
+    </table>
+    <button type="submit">Сохранить</button>
+</form>
+____________________________________________________________
+templates/create_profile.html
+****************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создать профиль</title>
+</head>
+<body>
+    <h2>Создать профиль</h2>
+    {% include 'user_form.html' %}
+    <br>
+    <a href="{% url 'user_list' %}">Назад к списку</a>
+</body>
+</html>
+____________________________________________________________
+templates/user_list.html
+************************
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список пользователей</title>
+</head>
+<body>
+    <h2>Пользователи</h2>
+    <a href="{% url 'create_profile' %}">Добавить пользователя</a>
+    <ul>
+        {% for user in users %}
+        <li>
+            {{ user.name }}, {{ user.age }} лет, {{ user.phone }}, {{ user.email }}
+            <a href="{% url 'delete_user' user.id %}" onclick="return confirm('Удалить?')">[Удалить]</a>
+        </li>
+        {% empty %}
+        <li>Нет пользователей.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'index' %}">На главную</a>
+</body>
+</html>
+____________________________________________________________
+🛠️ Дополнительные шаги (вне кода):
+Убедись, что main_app добавлен в INSTALLED_APPS в settings.py:
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'main_app',
+]
+____________________________________________________________
+Создай папку templates в main_app и размести там шаблоны.
+
+Сделай миграции:
+python manage.py makemigrations
+python manage.py migrate
+____________________________________________________________
+✅ Что сделано:
+Все файлы проекта
+Валидация формы
+POST и GET обработка
+Редирект при ошибках (упрощённо)
+Удаление пользователей
+Простые шаблоны
+Если хочешь, могу адаптировать под CBV (классы) или добавить 
+сообщения об ошибках при валидации — напиши!
 
 
 
