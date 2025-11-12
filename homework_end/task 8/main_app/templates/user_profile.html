@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Профиль пользователя{% endblock %}
+{% block content %}
+<div class="header">
+    <h2>👤 Профиль пользователя #{{ user.id }}</h2>
+    <div>
+        <a href="{% url 'edit_profile' user.id %}" class="btn">✏️ Редактировать</a>
+        <a href="{% url 'user_list' %}" class="btn btn-secondary">← Назад к списку</a>
+    </div>
+</div>
+
+<div class="user-card">
+    <h3>📋 Основная информация</h3>
+    <div class="user-info">
+        <strong>👤 Имя:</strong> {{ user.name }}
+    </div>
+    <div class="user-info">
+        <strong>📧 Email:</strong> <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+    </div>
+    <div class="user-info">
+        <strong>📱 Телефон:</strong> <a href="tel:{{ user.phone }}">{{ user.phone }}</a>
+    </div>
+    <div class="user-info">
+        <strong>🎂 Возраст:</strong> {{ user.age }} лет
+    </div>
+</div>
+
+<div class="user-card">
+    <h3>📅 Временная информация</h3>
+    <div class="user-info">
+        <strong>📅 Создан:</strong> {{ user.created_at|date:"d.m.Y H:i:s" }}
+    </div>
+    <div class="user-info">
+        <strong>✏️ Последнее обновление:</strong> {{ user.updated_at|date:"d.m.Y H:i:s" }}
+    </div>
+</div>
+
+<div class="actions">
+    <a href="{% url 'edit_profile' user.id %}" class="btn">✏️ Редактировать профиль</a>
+    <form method="post" action="{% url 'delete_user' user.id %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Удалить пользователя {{ user.name }}?')">
+            🗑️ Удалить пользователя
+        </button>
+    </form>
+</div>
+{% endblock %}

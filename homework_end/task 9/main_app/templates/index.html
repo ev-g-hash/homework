@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+<div class="header">
+    <h1>Система управления пользователями</h1>
+</div>
+
+<div class="user-card">
+    <h3>Добро пожаловать!</h3>
+    <p>Здесь вы можете:</p>
+    <ul>
+        <li>Просматривать список всех пользователей</li>
+        <li>Создавать новые профили пользователей</li>
+        <li>Редактировать существующие профили</li>
+        <li>Удалять пользователей</li>
+    </ul>
+</div>
+
+<div class="actions">
+    <a href="{% url 'user_list' %}" class="btn btn-success">Посмотреть всех пользователей</a>
+    <a href="{% url 'create_profile' %}" class="btn">Создать профиль</a>
+</div>
+{% endblock %} 

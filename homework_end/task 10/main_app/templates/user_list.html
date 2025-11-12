@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Список пользователей{% endblock %}
+{% block content %}
+<div class="header">
+    <h2>👥 Список пользователей ({{ users.count }})</h2>
+    <a href="{% url 'create_profile' %}" class="btn">➕ Добавить пользователя</a>
+</div>
+
+{% if users %}
+    {% for user in users %}
+    <div class="user-card">
+        <h3>{{ user.name }}</h3>
+        <div class="user-info">
+            <strong>📧 Email:</strong> {{ user.email }}
+        </div>
+        <div class="user-info">
+            <strong>📱 Телефон:</strong> {{ user.phone }}
+        </div>
+        <div class="user-info">
+            <strong>🎂 Возраст:</strong> {{ user.age }} лет
+        </div>
+        <div class="user-info">
+            <strong>📅 Создан:</strong> {{ user.created_at|date:"d.m.Y H:i" }}
+        </div>
+        
+        <div class="actions">
+            <a href="{% url 'user_profile' user.id %}" class="btn btn-success">👁️ Просмотр</a>
+            <a href="{% url 'edit_profile' user.id %}" class="btn">✏️ Редактировать</a>
+            <form method="post" action="{% url 'delete_user' user.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">🗑️ Удалить</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="user-card">
+        <h3>😔 Пока нет пользователей</h3>
+        <p>Создайте первого пользователя в системе!</p>
+        <a href="{% url 'create_profile' %}" class="btn">➕ Добавить пользователя</a>
+    </div>
+{% endif %}
+
+{% comment %} <script>
+// Интерактивность для списка пользователей
+document.addEventListener('DOMContentLoaded', function() {
+    const userCards = document.querySelectorAll('.user-card');
+    
+    userCards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 100);
+    });
+    
+    // Счетчик пользователей с анимацией
+    const userCount = {{ users.count }};
+    if (userCount > 0) {
+        setTimeout(() => {
+            alert(`🎉 Отлично! У вас уже ${userCount} пользователь${userCount === 1 ? '' : userCount < 5 ? 'а' : 'ей'} в системе!`);
+        }, 3000);
+    }
+});
+</script> {% endcomment %}
+{% endblock %}

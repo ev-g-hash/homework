@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Создание профиля{% endblock %}
+{% block content %}
+<div class="header">
+    <h2>Создание профиля пользователя</h2>
+</div>
+
+<div class="user-card">
+    <h3>Форма создания</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <div class="actions">
+            <button type="submit" class="btn btn-success">Создать</button>
+            <a href="{% url 'user_list' %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

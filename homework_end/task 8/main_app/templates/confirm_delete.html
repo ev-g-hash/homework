@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Подтверждение удаления{% endblock %}
+{% block content %}
+<div class="header">
+    <h2>⚠️ Подтверждение удаления</h2>
+    <a href="{% url 'user_profile' user.id %}" class="btn btn-secondary">← Назад к профилю</a>
+</div>
+
+<div class="user-card">
+    <h3>🗑️ Удаление пользователя</h3>
+    <div class="alert alert-error">
+        <strong>Внимание!</strong> Вы уверены, что хотите удалить пользователя <strong>{{ user.name }}</strong>?
+    </div>
+    
+    <div class="user-info">
+        <strong>👤 Имя:</strong> {{ user.name }}
+    </div>
+    <div class="user-info">
+        <strong>📧 Email:</strong> {{ user.email }}
+    </div>
+    <div class="user-info">
+        <strong>📱 Телефон:</strong> {{ user.phone }}
+    </div>
+    <div class="user-info">
+        <strong>🎂 Возраст:</strong> {{ user.age }} лет
+    </div>
+    
+    <div class="alert">
+        <strong>⚠️ Это действие нельзя отменить!</strong>
+    </div>
+    
+    <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">🗑️ Да, удалить навсегда</button>
+    </form>
+    <a href="{% url 'user_profile' user.id %}" class="btn btn-secondary">❌ Отмена</a>
+</div>
+{% endblock %}

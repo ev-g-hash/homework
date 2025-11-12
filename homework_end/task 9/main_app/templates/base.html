@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Управление пользователями{% endblock %}</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #f5f5f5;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .nav { 
+            background: #333; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border-radius: 5px;
+        }
+        .nav a { 
+            color: white; 
+            text-decoration: none; 
+            margin-right: 15px; 
+            padding: 8px 15px; 
+            border-radius: 3px;
+        }
+        .nav a:hover { background: #555; }
+        .form-group { margin-bottom: 15px; }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold; 
+        }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+        }
+        .btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #0056b3; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #5a6268; }
+        .user-card { 
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            border-radius: 5px; 
+            background: #fafafa;
+        }
+        .user-info { margin-bottom: 10px; }
+        .user-info strong { color: #333; }
+        .errorlist { 
+            color: red; 
+            list-style: none; 
+            padding: 0; 
+            margin: 5px 0;
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .header h1, .header h2 { margin: 0; color: #333; }
+        .actions { 
+            margin-top: 15px; 
+            padding-top: 15px; 
+            border-top: 1px solid #ddd; 
+        }
+        .actions .btn { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="{% url 'index' %}">Главная</a>
+            <a href="{% url 'user_list' %}">Список пользователей</a>
+            <a href="{% url 'create_profile' %}">Создать профиль</a>
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

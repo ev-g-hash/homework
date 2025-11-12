@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система управления пользователями{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav { 
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            padding: 20px; 
+            margin-bottom: 30px; 
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav a { 
+            color: white; 
+            text-decoration: none; 
+            margin-right: 20px; 
+            padding: 12px 20px; 
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .nav a:hover { 
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .header h1, .header h2 { 
+            margin: 0; 
+            color: #333;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .form-group { 
+            margin-bottom: 25px; 
+            position: relative;
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #555;
+            font-size: 14px;
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        input:focus { 
+            border-color: #667eea;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn { 
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .btn-success { 
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+        
+        .btn-danger { 
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+        
+        .btn-secondary { 
+            background: linear-gradient(45deg, #757575, #616161);
+        }
+        
+        .btn-warning { 
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+        }
+        
+        .user-card { 
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border: 1px solid #e0e0e0; 
+            padding: 25px; 
+            margin-bottom: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .user-info { 
+            margin-bottom: 12px; 
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .user-info:last-child {
+            border-bottom: none;
+        }
+        
+        .user-info strong { 
+            color: #667eea; 
+            font-weight: 600;
+        }
+        
+        .errorlist { 
+            color: #f44336; 
+            list-style: none; 
+            padding: 0; 
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .actions { 
+            margin-top: 20px; 
+            padding-top: 20px; 
+            border-top: 2px solid #f0f0f0; 
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .welcome-message {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .success-message {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            flex: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .nav a {
+                display: block;
+                margin: 5px 0;
+                text-align: center;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <nav class="nav">
+            <a href="{% url 'index' %}">🏠 Главная</a>
+            <a href="{% url 'user_list' %}">👥 Пользователи</a>
+            <a href="{% url 'create_profile' %}">➕ Добавить</a>
+        </nav>
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <a href="{% url 'create_profile' %}" class="floating-btn">➕</a>
+    
+    <script>
+        // Приветствие при загрузке страницы
+        {% comment %} document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            let greeting = '';
+            
+            if (currentPath === '/' || currentPath === '') {
+                greeting = '👋 Добро пожаловать в систему управления пользователями!';
+            } else if (currentPath.includes('user_list')) {
+                greeting = '📋 Здесь вы можете просмотреть всех пользователей';
+            } else if (currentPath.includes('create_profile')) {
+                greeting = '📝 Заполните форму для создания нового пользователя';
+            } else if (currentPath.includes('edit_profile')) {
+                greeting = '✏️ Отредактируйте данные пользователя';
+            } else if (currentPath.includes('user_profile')) {
+                greeting = '👤 Просмотр профиля пользователя';
+            }
+            
+            if (greeting) {
+                setTimeout(() => {
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.className = 'welcome-message';
+                    welcomeDiv.innerHTML = greeting;
+                    welcomeDiv.style.opacity = '0';
+                    welcomeDiv.style.transform = 'translateY(-20px)';
+                    
+                    const container = document.querySelector('.container');
+                    container.insertBefore(welcomeDiv, container.firstChild);
+                    
+                    // Анимация появления
+                    setTimeout(() => {
+                        welcomeDiv.style.transition = 'all 0.5s ease';
+                        welcomeDiv.style.opacity = '1';
+                        welcomeDiv.style.transform = 'translateY(0)';
+                    }, 100);
+                    
+                    // Автоматическое скрытие через 4 секунды
+                    setTimeout(() => {
+                        welcomeDiv.style.transition = 'all 0.5s ease';
+                        welcomeDiv.style.opacity = '0';
+                        welcomeDiv.style.transform = 'translateY(-20px)';
+                        setTimeout(() => {
+                            if (welcomeDiv.parentNode) {
+                                welcomeDiv.parentNode.removeChild(welcomeDiv);
+                            }
+                        }, 500);
+                    }, 4000);
+                }, 500);
+            }
+        }); {% endcomment %}
+        
+        // Интерактивность для кнопок
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn')) {
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 150);
+            }
+        });
+        
+        // Анимация для форм
+        document.addEventListener('focus', function(e) {
+            if (e.target.tagName === 'INPUT') {
+                e.target.parentElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    e.target.parentElement.style.transform = '';
+                }, 200);
+            }
+        }, true);
+        
+        // Подтверждение для критических действий
+        document.addEventListener('submit', function(e) {
+            if (e.target.action.includes('delete_user')) {
+                if (!confirm('⚠️ Вы уверены, что хотите удалить этого пользователя? Это действие нельзя отменить!')) {
+                    e.preventDefault();
+                }
+            }
+        });
+        
+        // Эффект печатающей машинки для заголовков
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        
+        // Применяем эффект к заголовкам
+        document.addEventListener('DOMContentLoaded', function() {
+            const headers = document.querySelectorAll('h1, h2');
+            headers.forEach(header => {
+                const originalText = header.textContent;
+                if (originalText.trim()) {
+                    setTimeout(() => {
+                        typeWriter(header, originalText, 50);
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
