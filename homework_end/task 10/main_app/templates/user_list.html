@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Список пользователей{% endblock %}
 {% block content %}
 <div class="header">
@@ -41,31 +42,5 @@
     </div>
 {% endif %}
 
-{% comment %} <script>
-// Интерактивность для списка пользователей
-document.addEventListener('DOMContentLoaded', function() {
-    const userCards = document.querySelectorAll('.user-card');
-    
-    userCards.forEach((card, index) => {
-        setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 100);
-    });
-    
-    // Счетчик пользователей с анимацией
-    const userCount = {{ users.count }};
-    if (userCount > 0) {
-        setTimeout(() => {
-            alert(`🎉 Отлично! У вас уже ${userCount} пользователь${userCount === 1 ? '' : userCount < 5 ? 'а' : 'ей'} в системе!`);
-        }, 3000);
-    }
-});
-</script> {% endcomment %}
+
 {% endblock %}

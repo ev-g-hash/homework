@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Сортировка пользователей{% endblock %}
+{% block content %}
+<div class="header">
+    <h2>🔄 Сортировка пользователей</h2>
+    <a href="{% url 'user_list' %}" class="btn btn-secondary">👥 Обычный список</a>
+</div>
+
+<div class="sort-info">
+    <div>
+        <strong>Текущая сортировка:</strong> 
+        <span class="sort-badge">По {{ sort_field }} ({{ sort_dir }})</span>
+    </div>
+    <div class="sort-controls">
+        <a href="{% url 'sort_users' 'id' 'up' %}" class="btn btn-info" {% if current_field == 'id' and current_dir == 'up' %}style="background: rgba(255,255,255,0.3);"{% endif %}>ID ↑</a>
+        <a href="{% url 'sort_users' 'id' 'dn' %}" class="btn btn-info" {% if current_field == 'id' and current_dir == 'dn' %}style="background: rgba(255,255,255,0.3);"{% endif %}>ID ↓</a>
+        <a href="{% url 'sort_users' 'name' 'up' %}" class="btn btn-info" {% if current_field == 'name' and current_dir == 'up' %}style="background: rgba(255,255,255,0.3);"{% endif %}>Имя ↑</a>
+        <a href="{% url 'sort_users' 'name' 'dn' %}" class="btn btn-info" {% if current_field == 'name' and current_dir == 'dn' %}style="background: rgba(255,255,255,0.3);"{% endif %}>Имя ↓</a>
+        <a href="{% url 'sort_users' 'age' 'up' %}" class="btn btn-info" {% if current_field == 'age' and current_dir == 'up' %}style="background: rgba(255,255,255,0.3);"{% endif %}>Возраст ↑</a>
+        <a href="{% url 'sort_users' 'age' 'dn' %}" class="btn btn-info" {% if current_field == 'age' and current_dir == 'dn' %}style="background: rgba(255,255,255,0.3);"{% endif %}>Возраст ↓</a>
+    </div>
+</div>
+
+<div class="sort-nav">
+    <span>🚀 Быстрые варианты сортировки:</span>
+    <a href="{% url 'sort_users' 'id' 'up' %}">По ID (новые первыми)</a>
+    <a href="{% url 'sort_users' 'name' 'up' %}">По имени (А-Я)</a>
+    <a href="{% url 'sort_users' 'age' 'dn' %}">По возрасту (старшие первыми)</a>
+    <a href="{% url 'sort_users' 'age' 'up' %}">По возрасту (младшие первыми)</a>
+</div>
+
+{% if user_data %}
+    {% for user in user_data %}
+    <div class="user-card">
+        <h3>{{ user.name }}</h3>
+        <div class="user-info">
+            <strong>🆔 ID:</strong> {{ user.id }}
+        </div>
+        <div class="user-info">
+            <strong>📧 Email:</strong> {{ user.email }}
+        </div>
+        <div class="user-info">
+            <strong>📱 Телефон:</strong> {{ user.phone }}
+        </div>
+        <div class="user-info">
+            <strong>🎂 Возраст:</strong> {{ user.age }} лет
+        </div>
+        <div class="user-info">
+            <strong>📅 Создан:</strong> {{ user.created_at|date:"d.m.Y H:i" }}
+        </div>
+        
+        <div class="actions">
+            <a href="{% url 'user_profile' user.id %}" class="btn btn-success">👁️ Просмотр</a>
+            <a href="{% url 'edit_profile' user.id %}" class="btn">✏️ Редактировать</a>
+            <form method="post" action="{% url 'delete_user' user.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">🗑️ Удалить</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="user-card">
+        <h3>😔 Пользователей не найдено</h3>
+        <p>В системе пока нет пользователей для сортировки.</p>
+        <a href="{% url 'create_profile' %}" class="btn">➕ Добавить пользователя</a>
+    </div>
+{% endif %}
+
+<script>
+// Приветствие на странице сортировки
+setTimeout(() => {
+    alert('🔄 Добро пожаловать на страницу сортировки!\n\nВы можете сортировать пользователей по:\n• ID (по умолчанию)\n• Имени\n• Возрасту\n\nВ каждой категории доступна сортировка по возрастанию (↑) и убыванию (↓).');
+}, 1500);
+
+// Анимация для карточек пользователей
+document.addEventListener('DOMContentLoaded', function() {
+    const userCards = document.querySelectorAll('.user-card');
+    
+    userCards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px) scale(0.95)';
+            card.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0) scale(1)';
+            }, 100);
+        }, index * 150);
+    });
+    
+    // Подсветка активных кнопок сортировки
+    const sortButtons = document.querySelectorAll('.sort-controls .btn');
+    sortButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Убираем активность со всех кнопок
+            sortButtons.forEach(b => b.style.background = '');
+            
+            // Добавляем активность к нажатой кнопке
+            setTimeout(() => {
+                this.style.background = 'rgba(255,255,255,0.3)';
+            }, 100);
+        });
+    });
+});
+</script>
+{% endblock %}

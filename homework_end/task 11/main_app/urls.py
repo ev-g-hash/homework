@@ -1,0 +1,13 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('user_list/', views.user_list, name='user_list'),
+    path('sort_users/<str:field>/<str:dir>/', views.sort_users, name='sort_users'),
+    path('sort_users/', views.sort_users, name='sort_users_default'),
+    path('create_profile/', views.create_profile, name='create_profile'),
+    path('user_profile/<int:user_id>/', views.user_profile, name='user_profile'),
+    path('edit_profile/<int:user_id>/', views.edit_profile, name='edit_profile'),
+    path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+]

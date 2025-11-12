@@ -19,7 +19,7 @@
         }
         
         .container { 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto; 
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
@@ -34,23 +34,58 @@
             margin-bottom: 30px; 
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .nav a { 
             color: white; 
             text-decoration: none; 
-            margin-right: 20px; 
             padding: 12px 20px; 
             border-radius: 25px;
             transition: all 0.3s ease;
             font-weight: 500;
             display: inline-block;
+            background: rgba(255,255,255,0.1);
         }
         
         .nav a:hover { 
             background: rgba(255,255,255,0.2);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .sort-nav {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .sort-nav span {
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .sort-nav a {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .sort-nav a:hover, .sort-nav a.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
         }
         
         .header { 
@@ -114,6 +149,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: none;
         }
         
         .btn:hover { 
@@ -137,6 +173,10 @@
             background: linear-gradient(45deg, #ff9800, #f57c00);
         }
         
+        .btn-info {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+        
         .user-card { 
             background: linear-gradient(145deg, #ffffff, #f8f9fa);
             border: 1px solid #e0e0e0; 
@@ -145,11 +185,23 @@
             border-radius: 15px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .user-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .user-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
         }
         
         .user-info { 
@@ -204,6 +256,23 @@
             text-align: center;
             font-weight: 600;
             box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .sort-info {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .stats {
@@ -262,16 +331,30 @@
             animation: fadeInUp 0.6s ease-out;
         }
         
+        .sort-badge {
+            background: linear-gradient(45deg, #FF5722, #E64A19);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
                 padding: 20px;
             }
             
-            .nav a {
+            .nav, .sort-nav {
+                flex-direction: column;
+            }
+            
+            .nav a, .sort-nav a {
                 display: block;
-                margin: 5px 0;
                 text-align: center;
+                margin: 5px 0;
             }
             
             .actions {
@@ -281,6 +364,11 @@
             .stats {
                 flex-direction: column;
             }
+            
+            .sort-info {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
@@ -288,8 +376,9 @@
     <div class="container fade-in">
         <nav class="nav">
             <a href="{% url 'index' %}">🏠 Главная</a>
-            <a href="{% url 'user_list' %}">👥 Пользователи</a>
+            <a href="{% url 'user_list' %}">👥 Список пользователей</a>
             <a href="{% url 'create_profile' %}">➕ Добавить</a>
+            <a href="{% url 'sort_users_default' %}">🔄 Сортировка</a>
         </nav>
         
         {% block content %}{% endblock %}
@@ -299,7 +388,7 @@
     
     <script>
         // Приветствие при загрузке страницы
-        {% comment %} document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname;
             let greeting = '';
             
@@ -307,6 +396,8 @@
                 greeting = '👋 Добро пожаловать в систему управления пользователями!';
             } else if (currentPath.includes('user_list')) {
                 greeting = '📋 Здесь вы можете просмотреть всех пользователей';
+            } else if (currentPath.includes('sort_users')) {
+                greeting = '🔄 Страница сортировки пользователей';
             } else if (currentPath.includes('create_profile')) {
                 greeting = '📝 Заполните форму для создания нового пользователя';
             } else if (currentPath.includes('edit_profile')) {
@@ -346,62 +437,17 @@
                     }, 4000);
                 }, 500);
             }
-        }); {% endcomment %}
+        });
         
         // Интерактивность для кнопок
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn')) {
-                e.target.style.transform = 'scale(0.95)';
+            if (e.target.classList.contains('btn') || e.target.closest('.btn')) {
+                const btn = e.target.classList.contains('btn') ? e.target : e.target.closest('.btn');
+                btn.style.transform = 'scale(0.95)';
                 setTimeout(() => {
-                    e.target.style.transform = '';
+                    btn.style.transform = '';
                 }, 150);
             }
-        });
-        
-        // Анимация для форм
-        document.addEventListener('focus', function(e) {
-            if (e.target.tagName === 'INPUT') {
-                e.target.parentElement.style.transform = 'scale(1.02)';
-                setTimeout(() => {
-                    e.target.parentElement.style.transform = '';
-                }, 200);
-            }
-        }, true);
-        
-        // Подтверждение для критических действий
-        document.addEventListener('submit', function(e) {
-            if (e.target.action.includes('delete_user')) {
-                if (!confirm('⚠️ Вы уверены, что хотите удалить этого пользователя? Это действие нельзя отменить!')) {
-                    e.preventDefault();
-                }
-            }
-        });
-        
-        // Эффект печатающей машинки для заголовков
-        function typeWriter(element, text, speed = 100) {
-            let i = 0;
-            element.innerHTML = '';
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
-            }
-            type();
-        }
-        
-        // Применяем эффект к заголовкам
-        document.addEventListener('DOMContentLoaded', function() {
-            const headers = document.querySelectorAll('h1, h2');
-            headers.forEach(header => {
-                const originalText = header.textContent;
-                if (originalText.trim()) {
-                    setTimeout(() => {
-                        typeWriter(header, originalText, 50);
-                    }, 1000);
-                }
-            });
         });
     </script>
 </body>
